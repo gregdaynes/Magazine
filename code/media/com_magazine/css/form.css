@@ -1,0 +1,41 @@
+div.name,
+div.title {
+	padding: 12px 16px 12px 12px;
+	margin-bottom: 12px;
+	background-color: #F0F0F0;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F0F0F0), to(#EAEAEA));
+	background-image: -moz-linear-gradient(0% 0% 270deg,#F0F0F0, #EAEAEA);
+	border: 1px solid #DDD;
+}
+
+#title,
+#name {
+	margin: 0 4px 0 0;
+	display: block;
+	font-size: 200%;
+	width: 99%;
+	padding: 4px;
+}
+
+label[for="alias"],
+label[for="url"] {
+	float: left;
+	width: 90%;
+	padding: 2px;
+}
+
+label[for="alias"] input#alias,
+label[for="url"] input#url {
+	width: 40%;
+	margin: 0;
+	padding: 2px;
+}
+
+textarea.inputbox {
+	box-sizing: border-box;
+	margin: 0;
+	resize: vertical;
+	width: 100%;
+	border: none;
+	padding: 5px 5px 0 5px;
+}
