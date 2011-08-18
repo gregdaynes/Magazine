@@ -21,7 +21,9 @@ window.addEvent('domready', function() {
 			}).send('z='+config.zoom+'&p='+ page);		
 		};
 	}
-					
+	
+	// page loads - get pages
 	fetch_pages(new Array(config.page.left, config.page.right));
 	
+		
 });

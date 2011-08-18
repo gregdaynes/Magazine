@@ -2,11 +2,14 @@
 	// params
 	$params = new stdClass();
 	$params->zoom_levels = array(
-							   '-3' => array('width' => 256,  'height' => 334),
-							   '-2'  => array('width' => 640,  'height' => 834),
-							   '-1'   => array('width' => 800,  'height' => 1043),
-							   '0'   => array('width' => 1024, 'height' => 1334),
-							   '1'   => array('width' => 2048, 'height' => 2669)
+							   '-3' => array('width' => 220,  'height' => 286),
+							   '-2' => array('width' => 252, 'height' =>325),
+							   '-1'  => array('width' => 284,  'height' => 370),
+							   '0'   => array('width' => 436, 'height' => 568),
+							   '1'   => array('width' => 630, 'height' => 821),
+							   '2'   => array('width' => 728, 'height' => 949),
+							   '3'   => array('width' => 1024, 'height' => 1335),
+							   '4'   => array('width' => 2048, 'height' => 2669)
 						   );
 	$params->wrapper = $params->zoom_levels;
 	
@@ -20,7 +23,7 @@
 	if ($config->layout == 2) {
 		foreach($params->wrapper as $name => $dimensions) {
 			
-			$params->wrapper[$name]['width'] = ($dimensions['width'] * 2) + 50;
+			$params->wrapper[$name]['width'] = ($dimensions['width'] * 2);
 			
 		}
 		
@@ -62,7 +65,7 @@
 		}
 		
 		.wrapper {
-			width: <?= $params->wrapper[$config->zoom]['width'] + 25 + 4; ?>px;
+			width: <?= $params->wrapper[$config->zoom]['width'] + 50 + 4; ?>px;
 			height: <?= $params->wrapper[$config->zoom]['height'] + 50; ?>px;
 		}
 	</style>
