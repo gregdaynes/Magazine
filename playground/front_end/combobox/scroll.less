@@ -3,16 +3,12 @@
     overflow: hidden;
     
 	.wrapper {
-		width: 1024px + 50px + 2px; // page widths combined + margins + borders
-		height: 1335px + 50px;
 		display:block;
 		margin: 0 auto;
 		padding: 25px 0 0 0;
 	}
 	
 	.page {
-	    height: 1335px;
-	    width: 1024px;
 	    border: 1px solid #bbb;
 	    margin: 25px;
 	    float: left;
@@ -35,6 +31,11 @@
 	    
 	    &.right {
 	    	margin-left: 0;
+	    }
+	    
+	    &.disabled {
+	    	border: 1px solid rgba(0,0,0,0.1);
+	    	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 	    }
 	}
 

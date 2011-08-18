@@ -12,7 +12,7 @@ if (!isset($_GET['p'])) {
 
 // zoom level
 if (!isset($_GET['z'])) {
-	$z = '0';
+	$z = 'm';
 } else {
 	$z = $_GET['z'];
 }
@@ -23,6 +23,7 @@ $sizes = array(
 			'-1' => '4.5.800.1043',
 			'0'  => '4.6.1024.1334',
 			'1'  => '8.11.2048.2669');
+			
 $grid_values = explode('.',$sizes[$z]);
 $grid = new stdClass();
 
@@ -33,35 +34,37 @@ $grid->height = $grid_values[3];
 
 // get image count from db (folder in this test)
 $p = sprintf("%03s", $p);
-	$dir = $dir.$p.'/'.$z.'/';
-	
-	if (is_dir($dir)) {
-		if ($dh = opendir($dir)) {
-			while (($file = readdir($dh)) !== false) {
-				
-				if ($file != '.' && $file != '..') { // exclude . && .. folders
-					$folder_contents[] = $file;
-					//echo "filename: $file : filetype: " . filetype($dir . $file) . "<br />\n";
-				}			
-				
-			}
-			closedir($dh);
-		}
-	}
+$dir = $dir.$p.'/'.$z.'/';
 
-// build grid
-$j=1;
-for($i=0;$i<$grid->y;$i++)
-{
-	echo '<div class="row">';
-	
-	for($n=0;$n<$grid->x;$n++)
-	{
-		$p = sprintf("%02s", $p); // pad single digit numbers
-		$j = sprintf("%02s", $j); // pad single digit numbers
-		echo '<div class="column"><img src="../'.$dir.$j.'.jpg" /></div>';
-		$j++;
+if (is_dir($dir)) {
+	if ($dh = opendir($dir)) {
+		while (($file = readdir($dh)) !== false) {
+			
+			if ($file != '.' && $file != '..') { // exclude . && .. folders
+				$folder_contents[] = $file;
+				//echo "filename: $file : filetype: " . filetype($dir . $file) . "<br />\n";
+			}			
+			
+		}
+		closedir($dh);
 	}
 	
-	echo '</div>';
+	// build grid
+	$j=1;
+	for($i=0;$i<$grid->y;$i++)
+	{
+		echo '<div class="row">';
+		
+		for($n=0;$n<$grid->x;$n++)
+		{
+			$p = sprintf("%02s", $p); // pad single digit numbers
+			$j = sprintf("%02s", $j); // pad single digit numbers
+			echo '<div class="column"><img src="../'.$dir.$j.'.jpg" /></div>';
+			$j++;
+		}
+		
+		echo '</div>';
+	}
+} else {
+	header("HTTP/1.0 404 Not Found");
 }
