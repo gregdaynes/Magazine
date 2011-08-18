@@ -1,0 +1,81 @@
+nav {
+	display: -webkit-box;
+	text-align: center;
+	color: #fff;
+	max-height: 30px;
+	line-height: 30px;
+	position:relative;
+	
+	background-image: -webkit-linear-gradient(top, #444, #222); /* Chrome 10+, Saf5.1+ */
+	-webkit-box-shadow: 0px 0px 5px #333;
+	-webkit-box-flex: 1;
+	
+	.section {
+		border-right: 1px solid #222;
+		border-left: 1px solid #444;
+		
+		&.first {
+			border-left: none;
+		}
+		
+		&.last {
+			border-right: none;
+		}
+	}
+
+	#prev {
+		display: block;
+		cursor: pointer;
+		
+		-webkit-box-ordinal-group: 1;
+		-webkit-box-flex: 1;
+	}
+	
+	
+	#page_info {
+		display: block;
+		
+		-webkit-box-ordinal-group: 2;
+		-webkit-box-flex: 20;
+	}
+	
+	#page_tools {
+		display: -webkit-box;
+		
+		-webkit-box-ordinal-group: 3;
+		-webkit-box-flex: 1;
+		
+		
+		#zoom {
+			display: block;
+			
+			-webkit-box-flex: 1;
+		}
+		
+		#page_layout {
+			display: block;
+			
+			-webkit-box-flex: 1;
+		}
+	}
+	
+	#toc {
+		display: block;
+		
+		-webkit-box-ordinal-group: 4;
+		-webkit-box-flex: 1;
+	}
+	
+	#next {
+		display: block;
+		
+		-webkit-box-ordinal-group: 5;
+		-webkit-box-flex: 1;
+	}
+}
+
+#content {
+	display: -webkit-box;
+	
+	-webkit-box-flex: 100;
+}
