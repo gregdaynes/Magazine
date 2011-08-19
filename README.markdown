@@ -28,7 +28,36 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 + Nooku interface
 	+ Publisher view
 		+ Logo view + upload
-
+		
+### Playground
++ <strike>Page loading indicator</strike>
+	+ spin.js
++ Fade Load page
++ Ghosted Previous/Next Pages
++ PDF parser
++ Page animations
++ Contact sheet
++ Mouse Wheel zooming
++ Keyboard Navigation
+	+ &larr;	Previous Page
+	+ &rarr;	Next Page
+	+ &uarr;	Zoom In
+	+ &darr;	Zoom Out
+	+ P			Previous Page
+	+ N			Next Page
+	+ \+		Zoom in
+	+ \-		Zoom Out
+	+ I			Issue Index
+	+ M			Magazine Index of all Issues
+	+ T			Table of Contents
+	+ H			Hide toolbar
++ Page Flip + Binding mode
+	+ CSS3 3d transform to render pages
+	+ Look as if binded
+	+ page flip (possible curl?)
++ Lazy Load
+	+ page tile not on screen
+	
 ---  
 
 ### Future

@@ -12,7 +12,7 @@ if (!isset($_GET['p'])) {
 
 // zoom level
 if (!isset($_GET['z'])) {
-	$z = 'm';
+	$z = '0';
 } else {
 	$z = $_GET['z'];
 }

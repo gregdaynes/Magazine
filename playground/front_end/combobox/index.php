@@ -28,26 +28,6 @@
 		}
 		
 	}
-	
-	$page = $config->page; // get page
-	$page_side = ($page % 2) ? true : false; // is it a right or left hand page
-	
-	$page_layout['left'] = $page;
-	if ($config->layout >= 2) {
-		
-		$config->page_increment = 2;
-		
-		if ($page_side) { // right hand page
-			// get previous page
-			$page_layout['left'] = $page - 1;
-			$page_layout['right'] = $page;
-			
-		} else { // left hand page
-			// get next page
-			$page_layout['left'] = $page;
-			$page_layout['right'] = $page + 1;
-		}
-	}
 ?>
 <!doctype html>
 <head>
@@ -64,7 +44,7 @@
 			height: <?= $params->zoom_levels[$config->zoom]['height']; ?>px;
 		}
 		
-		.wrapper {
+		#wrapper {
 			width: <?= $params->wrapper[$config->zoom]['width'] + 50 + 4; ?>px;
 			height: <?= $params->wrapper[$config->zoom]['height'] + 50; ?>px;
 		}
@@ -72,22 +52,11 @@
 	<script src="./less.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools-yui-compressed.js"></script>
 	<script src="./mootools-more-1.3.2.1.js"></script>
-	
-	<script>
-		// configuration
-		var config = new Object();
-			//config.page  = null;
-			config.page = new Object();
-			config.page.left = <?= $page_layout['left']; ?>;
-			config.page.right = <?= (isset($page_layout['right']) ? $page_layout['right'] : 'null'); ?>;
-			config.zoom   = <?= $config->zoom; ?>;
-			config.layout = 1;
-		
-	</script>
+	<script src="./spin.js"></script>
 </head>
 <body>
 
-	<nav>
+	<nav id="toolbar">
 		<span id="page_info" class="section">
 			<span>Page title</span>
 			<span>001</span>
@@ -117,14 +86,7 @@
 	</nav>
 	
 	<div id="content">
-		<div class="wrapper">		
-				
-		<?php 
-		foreach($page_layout as $side => $this_page) : ?>
-			<div id="<?= $this_page; ?>" class="page <?= $side; ?> <? if ($this_page == 0) { echo ' disabled'; } ?>"></div>
-		<?php endforeach; ?>
-		
-		</div>
+		<div id="wrapper" class="wrapper"></div>
 	</div>
 		
 	<script src="./scroll.js"></script>
