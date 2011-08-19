@@ -21,6 +21,40 @@ window.addEvent('domready', function() {
                 'p': 1,
                 'l': 1,
                 'increment': 1
+            },
+            zoom: {
+                '-3': {
+                    'x': 220,
+                    'y': 286
+                },
+                '-2': {
+                    'x': 252,
+                    'y': 328
+                },
+                '-1': {
+                    'x': 284,
+                    'y': 370
+                },
+                '0': {
+                    'x': 436,
+                    'y': 568
+                },
+                '1': {
+                    'x': 630,
+                    'y': 821
+                },
+                '2': {
+                    'x': 728,
+                    'y': 949
+                },
+                '3': {
+                    'x': 1024,
+                    'y': 1335
+                },
+                '4': {
+                    'x': 2048,
+                    'y': 2669
+                }
             }
         },
         location = window.location.search.substring(1),
@@ -80,10 +114,19 @@ window.addEvent('domready', function() {
      */
     var generate_pages = function() {
         
-        $('wrapper').empty();
+        console.log(config.zoom[config.params.z]);
+        
+        $('wrapper').empty().setStyles({
+            'width': config.zoom[config.params.z].x * config.params.increment + 50 + 4,
+            'height': config.zoom[config.params.z].y + 50
+        });
         
         var new_page = new Element('div', {
-            class: 'page'
+            class: 'page',
+            styles: {
+                'width': config.zoom[config.params.z].x,
+                'height': config.zoom[config.params.z].y
+            }
         });
         
         Object.each(config.page, function(value, index) {        
@@ -119,15 +162,14 @@ window.addEvent('domready', function() {
                     $(document).getElement('[id='+page+']').addClass('disabled');
                 }
             }).get({
-                'p': page
+                'p': page,
+                'z': config.params.z
             });        
         };
     }
     
-    /**
-     * UI Events
-     */
-    $('prev').addEvent('click', function(e) {
+    // prev
+    var prev = function() {
         config.page.left = config.page.left - config.params.increment;
         config.params.p = config.page.left;
         
@@ -137,19 +179,44 @@ window.addEvent('domready', function() {
         
         generate_pages();
         fetch_pages(config.page);
+    }
+    
+    var next = function() {
+        config.page.left = config.page.left + config.params.increment;
+         config.params.p = config.page.left;
+         
+         if (config.page.right) {
+             config.page.right = config.page.right + config.params.increment;
+         }
+         
+        
+         generate_pages();
+         fetch_pages(config.page);
+    }
+    
+    var zoom_in = function() {
+        config.params.z = config.params.z + 1;
+        
+        generate_pages();
+        fetch_pages(config.page);
+    }
+    
+    var zoom_out = function() {
+        config.params.z = config.params.z - 1;
+        
+        generate_pages();
+        fetch_pages(config.page);
+    }
+    
+    /**
+     * UI Events
+     */
+    $('prev').addEvent('click', function(e) {
+        prev();
     });
     
     $('next').addEvent('click', function(e) {
-        config.page.left = config.page.left + config.params.increment;
-        config.params.p = config.page.left;
-        
-        if (config.page.right) {
-            config.page.right = config.page.right + config.params.increment;
-        }
-        
-       
-        generate_pages();
-        fetch_pages(config.page);
+        next();
     });
     
     /**
@@ -159,22 +226,22 @@ window.addEvent('domready', function() {
         
         // left arrow / p
         if (event.key == 'left' || event.key == 'p') {
-            console.log('left');
+            prev();
         }
         
         // right arrow / n
         if (event.key == 'right' || event.key == 'n') {
-            console.log('right');
+            next();
         }
         
         // up arrow / +
         if (event.key == 'up' || event.key == '=') {
-            console.log('up');
+            zoom_in();
         }
         
         // down arrow
         if (event.key == 'down' || event.key == '-') {
-            console.log('down');
+            zoom_out();
         }
         
         // i
