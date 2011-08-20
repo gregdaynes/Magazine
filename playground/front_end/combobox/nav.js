@@ -1,7 +1,7 @@
 var window = null;
 
 window.addEvent('domready', function() {
-    
+
     /**
      * Initialize
      */
@@ -76,46 +76,49 @@ window.addEvent('domready', function() {
             config.params[url_params[0]] = parseInt(url_params[1], 10);
         });
     };
-            
-    // multipage vs single page
-    if (config.params.l >= 2) {
-        
-        config.params.increment = 2;
-        
-        // multiple pages
-
-        // left page is the page assigned from the url
-        if (config.params.p == 0) {
-            config.params.p = 1;
-        }
-        
-        // if left page is an even numbered page alter the number by -1
-        if (config.params.p % 2) {
-        
-            // right page
-            config.page.left = config.params.p - 1;
-            config.page.right = config.page.left + 1;
-        } else {
-        
-            // left page
-            config.page.left = config.params.p;
-            config.page.right = config.page.left + 1;
-        }
-    } else {
+     
+    function page_initialize() {   
     
-        // single pages
-        config.page.left = config.params.p;
-    }
-    
+   		$('wrapper').empty();
+   		     
+    	// multipage vs single page
+	    if (config.params.l >= 2) {
+	        
+	        config.params.increment = 2;
+	        
+	        // multiple pages
+	
+	        // left page is the page assigned from the url
+	        if (config.params.p == 0) {
+	            config.params.p = 1;
+	        }
+	        
+	        // if left page is an even numbered page alter the number by -1
+	        if (config.params.p % 2) {
+	        
+	            // right page
+	            config.page.left = config.params.p - 1;
+	            config.page.right = config.page.left + 1;
+	        } else {
+	        
+	            // left page
+	            config.page.left = config.params.p;
+	            config.page.right = config.page.left + 1;
+	        }
+	    } else {
+	    	
+	    	config.params.increment = 1;
+	        // single pages
+	        config.page.left = config.params.p;
+	    }
+    };
     
     
     /**
      * Functions
      */
     var generate_pages = function() {
-        
-        console.log(config.zoom[config.params.z]);
-        
+                
         $('wrapper').empty().setStyles({
             'width': config.zoom[config.params.z].x * config.params.increment + 50 + 4,
             'height': config.zoom[config.params.z].y + 50
@@ -181,6 +184,7 @@ window.addEvent('domready', function() {
         fetch_pages(config.page);
     }
     
+    // next
     var next = function() {
         config.page.left = config.page.left + config.params.increment;
          config.params.p = config.page.left;
@@ -194,6 +198,7 @@ window.addEvent('domready', function() {
          fetch_pages(config.page);
     }
     
+    // zoom in
     var zoom_in = function() {
         config.params.z = config.params.z + 1;
         
@@ -201,6 +206,7 @@ window.addEvent('domready', function() {
         fetch_pages(config.page);
     }
     
+    // zoom out
     var zoom_out = function() {
         config.params.z = config.params.z - 1;
         
@@ -208,17 +214,55 @@ window.addEvent('domready', function() {
         fetch_pages(config.page);
     }
     
+    // layout
+    var double_page = function() {
+    	config.params.l = 2;
+    	
+    	page_initialize();
+    	generate_pages();
+    	fetch_pages(config.page);
+    }
+    
+    var single_page = function() {
+    	config.params.l = 1;
+    	delete config.page.right;
+    	
+    	page_initialize();
+    	generate_pages();
+    	fetch_pages(config.page);
+    }
+    
+    var toggle_toolbar = function() {
+    	$('toolbar').toggleClass('hidden');
+    }
+    
     /**
      * UI Events
      */
-    $('prev').addEvent('click', function(e) {
+    $('prev').addEvent('click', function() {
         prev();
     });
     
-    $('next').addEvent('click', function(e) {
+    $('next').addEvent('click', function() {
         next();
     });
     
+    $('zoom_increase').addEvent('click', function() {
+    	zoom_in();
+    });
+    
+    $('zoom_decrease').addEvent('click', function() {
+    	zoom_out();
+    });
+    
+    $('double').addEvent('click', function() {
+    	double_page();
+    });
+    
+    $('single').addEvent('click', function() {
+    	single_page();
+    });
+     
     /**
      * Key Bindings
      */
@@ -244,26 +288,35 @@ window.addEvent('domready', function() {
             zoom_out();
         }
         
-        // i
-        if (event.key == 'i') {
-            console.log('i');
-        }
-        
-        // m
-        if (event.key == 'm') {
-            console.log('m');
-        }
-        
-        // t
-        if (event.key == 't') {
-            console.log('t');
-        }
-        
         // h
         if (event.key == 'h') {
-            console.log('h');
+            toggle_toolbar();
         }
         
+        // s
+        if (event.key == 's') {
+        	single_page();
+        }
+        
+        // d
+        if (event.key == 'd') {
+        	double_page();
+        }
+    });
+    
+    /**
+     * Mousewheel Bindings
+     */
+    $(document).body.addEvent('mousewheel', function(event) {
+    	
+    	// scroll up
+    	if (event.wheel > 0) {
+    		zoom_in();
+    	}
+    	
+    	if (event.wheel < 0) {
+    		zoom_out();
+    	}
     });
     
     // page loads - get pages

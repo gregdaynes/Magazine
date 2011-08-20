@@ -32,35 +32,26 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 ### Playground
 + <strike>Page loading indicator</strike>
 	+ spin.js
-+ Fade Load page
-+ Ghosted Previous/Next Pages
-+ PDF parser
-+ Page animations
-+ Contact sheet
-+ Mouse Wheel zooming
-+ Keyboard Navigation
-	+ &larr;	Previous Page
-	+ &rarr;	Next Page
-	+ &uarr;	Zoom In
-	+ &darr;	Zoom Out
-	+ P			Previous Page
-	+ N			Next Page
-	+ \+		Zoom in
-	+ \-		Zoom Out
-	+ I			Issue Index
-	+ M			Magazine Index of all Issues
-	+ T			Table of Contents
-	+ H			Hide toolbar
-+ Page Flip + Binding mode
-	+ CSS3 3d transform to render pages
-	+ Look as if binded
-	+ page flip (possible curl?)
-+ Lazy Load
-	+ page tile not on screen
+
++ <strike>Mouse Wheel zooming</strike>
++ <strike>Keyboard Navigation</strike>
+	+ <strike>&larr;	Previous Page</strike>
+	+ <strike>&rarr;	Next Page</strike>
+	+ <strike>&uarr;	Zoom In</strike>
+	+ <strike>&darr;	Zoom Out</strike>
+	+ <strike>P			Previous Page</strike>
+	+ <strike>N			Next Page</strike>
+	+ <strike>\+		Zoom in</strike>
+	+ <strike>\-		Zoom Out</strike>
+	+ <strike>H			Hide toolbar</strike>
+	+ <strike>S			Single Page</strike>
+	+ <strike>D			Double Page</strike>
+
 	
 ---  
 
 ### Future
+
 + tools to
 	+ enable hyperlinks
 	+ embed video
@@ -75,3 +66,16 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 + preload next page
 + click/heatmap
 + analytics
+
+### Playground Future
++ Fade Load page
++ Ghosted Previous/Next Pages
++ PDF parser
++ Page animations
++ Contact sheet
++ Page Flip + Binding mode
+	+ CSS3 3d transform to render pages
+	+ Look as if binded
+	+ page flip (possible curl?)
++ Lazy Load
+	+ page tile not on screen
