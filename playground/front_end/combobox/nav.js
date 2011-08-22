@@ -1,5 +1,3 @@
-var window = null;
-
 window.addEvent('domready', function() {
 
     /**

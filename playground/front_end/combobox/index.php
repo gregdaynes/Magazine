@@ -6,13 +6,15 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	<link rel="stylesheet/less" type="text/css" href="./style.less">
+	<link rel="stylesheet/less" type="text/css" href="../../lib/css/style.less">
+	
+	<link rel="stylesheet/less" type="text/css" href="./nav.less">
+	<link rel="stylesheet/less" type="text/css" href="./scroll.less">
 
-	<script src="./less.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools-yui-compressed.js"></script>
-	<script src="./mootools-more-1.3.2.1.js"></script>
-	<script src="./LazyLoad.js"></script>
-	<script src="./spin.js"></script>
+	<script src="../../lib/js/less.js"></script>
+	<script src="../../lib/js/mootools.js"></script>
+	<script src="../../lib/js/mootools-more.js"></script>
+	<script src="../../lib/js/spin.js"></script>
 </head>
 <body>
 
