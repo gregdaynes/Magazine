@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet/less" type="text/css" href="../../lib/css/style.less" />
+    <link rel="stylesheet/less" type="text/css" href="pages.less" />
+    
+	<script src="../../lib/js/less.js"></script>
+	<script src="../../lib/js/mootools.js"></script>
+	<script src="../../lib/js/mootools-more.js"></script>
+	<script src="../../lib/js/spin.js"></script>
+</head>
+<body>
+    <nav id="toolbar">
+        <ul>
+            <li class="button previous">Previous</li>
+            <li class="button next">Next</li>
+            <li class="button zoom_increase">+</li>
+            <li class="button zoom_decrease">-</li>
+        </ul>
+    </nav>
+    <div id="container">
+        <div id="wrapper">
+            <div class="page" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script src="pages.js"></script>
+    <script>
+        window.addEvent('domready', function() {
+            magazine = new Pages();
+        });
+    </script>
+</body>
+</html>

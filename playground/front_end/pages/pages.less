@@ -1,0 +1,47 @@
+@page_width: 309px;
+@page_height: 400px;
+@page_margin: 5px;
+@page_border: 1px;
+
+#container {
+    cursor: move;
+    overflow: hidden;
+    display: -webkit-box;
+    
+    -webkit-box-flex: 100;
+    
+	#wrapper {
+		display:block;
+		margin: 0 auto;
+		padding: 0;		
+	}
+    
+    .page {
+        background-color: #fff;
+        border: @page_border solid black;
+        display: block;
+        float: left;
+        margin: @page_margin;
+        overflow: hidden;
+        
+        -webkit-box-shadow: 0px 0px 5px rgba(0,0,0,0.6);
+        
+        &.focused {
+            -webkit-box-shadow: 0px 0px 5px rgba(255,0,0,0.6);
+        }
+        
+        .column {
+        	display: block;
+        	float: left;
+        	max-width: 256px;
+        	max-height: 256px;
+        }
+        
+        .row {
+        	float: left;
+        	clear: both;
+        	display: block;
+        	height: 256px;
+        }
+    }
+}
