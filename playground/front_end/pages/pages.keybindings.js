@@ -53,6 +53,20 @@ var Pages = new Class(
         this.zoom(-1);
     },
     
+    toolBar: function() {
+        document.id(this.options.toolbar).toggle();
+    },
+    
+    singlePage: function() {
+        this.options.visiblePages = 1;
+        this.fadePages();
+    },
+    
+    doublePage: function() {
+        this.options.visiblePages = 2;
+        this.fadePages();
+    },
+    
 
 
 });

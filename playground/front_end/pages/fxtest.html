@@ -1,0 +1,50 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<style>
+    	div {
+    	     width: 100px;
+    	     height: 100px;
+    	     display: block;
+    	   float: left; 
+    	}
+    	
+    	#wrapper {
+    	    width: 100%;
+    	}
+    	.slide-1 { background-color: orange; }
+    	.slide-2 { background-color: red; }
+    	.slide-3 { background-color: yellow; }
+	</style>
+	
+	<script src="../../lib/js/mootools.js"></script>
+	<script src="../../lib/js/mootools-more.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="slide-1">Slide 1</div>
+        <div class="slide-2">Slide 2</div>
+        <div class="slide-3">Slide 3</div>
+    </div>
+    
+    <script>
+        window.addEvent('domready', function() {
+            
+            wrapper = document.id('wrapper');
+            images = wrapper.getElements('div');
+            
+            images.each(function(el, i) {
+               new Fx.Tween(el, {
+                   duration: i * 250,
+                   property: 'opacity'
+               }).start(1,0);
+            });            
+        });
+    </script>
+</body>
+</html>

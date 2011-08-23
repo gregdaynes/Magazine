@@ -7,7 +7,9 @@ var Pages = new Class(
         next:     'next',
         previous: 'previous',
         zoomIncrease: 'zoom_increase',
-        zoomDecrease: 'zoom_decrease'
+        zoomDecrease: 'zoom_decrease',
+        singlePage: 'single_page',
+        doublePage: 'double_page',
     },
     
     initialize: function(options) {
@@ -30,6 +32,14 @@ var Pages = new Class(
                                      }.bind(this));
         this.buttons.zoomDecrease = this.toolbar.getElement('[class~='+this.options.zoomDecrease+']').addEvent('click', function() {
                                          this.zoom(-1);
+                                     }.bind(this));
+        this.buttons.single_page = this.toolbar.getElement('[class~='+this.options.singlePage+']').addEvent('click', function() {
+                                         this.options.visiblePages = 1;
+                                         this.fadePages();
+                                     }.bind(this));
+        this.buttons.double_page = this.toolbar.getElement('[class~='+this.options.doublePage+']').addEvent('click', function() {
+                                         this.options.visiblePages = 2;
+                                         this.fadePages();
                                      }.bind(this));
     }
 });

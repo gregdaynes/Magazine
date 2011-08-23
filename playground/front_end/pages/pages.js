@@ -13,7 +13,7 @@ var Pages = new Class({
         currentPages: [],
         visiblePages: 2, // current, previous, next
         
-        currentZoom: -1,
+        currentZoom: 1,
         zoomLevels: {
             '-3': {
                 'x': 220,
@@ -59,7 +59,7 @@ var Pages = new Class({
         this.container = document.id(this.options.container);
         this.wrapper   = document.id(this.options.wrapper);
         
-        // initial functions        
+        // initial functions
         this.resizeWrapper(this.options.visiblePages); // resize wrapper to size of all visible pages
         this.generatePages(this.options.pageClass); // create divs of pages
         
@@ -109,6 +109,8 @@ var Pages = new Class({
                 focus = 'focused';
             }
             
+            
+            
             this.wrapper.adopt(new Element('div', {
                 'class':  this.options.pageClass,
                 'id':     id,
@@ -147,9 +149,19 @@ var Pages = new Class({
     },    
     
     fadePages: function() {    
-        this.wrapper.getChildren().fade('out');
-        this.resizeWrapper.delay('500', this);
-        this.generatePages.delay('250', this);
+        images = this.wrapper.getElements('img');
+        image_count =  images.length;
+                
+        base_duration = 5;
+        images.each(function(el, i) {
+            new Fx.Tween(el, {
+                duration: i * base_duration,
+                property: 'opacity'
+            }).start(1,0);
+        });
+        
+        this.resizeWrapper.delay( (image_count * base_duration + 10), this);
+        this.generatePages.delay( (image_count * base_duration), this);
     },
     
     advance: function(direction) {    
