@@ -7,11 +7,7 @@ var Pages = new Class({
         wrapper:   'wrapper',
         pageClass: 'page',
         
-        toolbar:  'toolbar',
-        next:     'next',
-        previous: 'previous',
-        zoomIncrease: 'zoom_increase',
-        zoomDecrease: 'zoom_decrease',
+        
         
         currentPage: 1,
         currentPages: [],
@@ -62,22 +58,6 @@ var Pages = new Class({
         // major elements
         this.container = document.id(this.options.container);
         this.wrapper   = document.id(this.options.wrapper);
-        this.toolbar   = document.id(this.options.toolbar);
-        
-        // toolbar buttons
-        this.buttons          = {}                    
-        this.buttons.next     = this.toolbar.getElement('[class~='+this.options.next+']').addEvent('click', function() {
-                                    this.advance(1);
-                                }.bind(this));
-        this.buttons.previous = this.toolbar.getElement('[class~='+this.options.previous+']').addEvent('click', function() {
-                                    this.advance(-1);
-                                }.bind(this));
-        this.buttons.zoomIncrease = this.toolbar.getElement('[class~='+this.options.zoomIncrease+']').addEvent('click', function() {
-                                         this.zoom(1);
-                                     }.bind(this));
-        this.buttons.zoomDecrease = this.toolbar.getElement('[class~='+this.options.zoomDecrease+']').addEvent('click', function() {
-                                         this.zoom(-1);
-                                     }.bind(this));
         
         // initial functions        
         this.resizeWrapper(this.options.visiblePages); // resize wrapper to size of all visible pages
@@ -157,7 +137,7 @@ var Pages = new Class({
                     page.adopt(response).fade('in');
                 },
                 onFailure: function() {
-                    page.addClass('disabled');
+                    page.addClass('disabled').fade('in');
                 }
             }).get({
                 'p': pageId,
@@ -166,7 +146,7 @@ var Pages = new Class({
         });
     },    
     
-    fadePages: function() {
+    fadePages: function() {    
         this.wrapper.getChildren().fade('out');
         this.resizeWrapper.delay('500', this);
         this.generatePages.delay('250', this);
