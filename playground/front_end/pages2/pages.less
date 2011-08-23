@@ -1,0 +1,105 @@
+/**
+ * Mixins
+ */
+.gradient (@top, @bottom) {
+    background-color: @top;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(@top), to(@bottom)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, @top, @bottom); /* Chrome 10+, Saf5.1+ */
+    background-image:    -moz-linear-gradient(top, @top, @bottom); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, @top, @bottom); /* IE10 */
+    background-image:      -o-linear-gradient(top, @top, @bottom); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, @top, @bottom);
+}
+
+/**
+ * Structural
+ */
+body {
+    nav {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+        position: fixed;
+        z-index: 2;
+        
+        li {
+            display: inline-block;
+        }
+    }
+    
+    #container {
+        overflow: hidden;
+        position:relative;
+        top: 30px;
+        
+        .wrapper {
+        	display: block;
+        	margin: 0 auto;
+        	
+        	.page {
+        	    display: block;
+        	    float: left;
+        	    overflow: hidden;
+        	    
+        	    .column {
+        	    	display: block;
+        	    	float: left;
+        	    	max-width: 256px;
+        	    	max-height: 256px;
+        	    }
+        	    
+        	    .row {
+        	    	float: left;
+        	    	clear: both;
+        	    	display: block;
+        	    	height: 256px;
+        	    }
+        	}
+        }
+    }
+}
+
+/**
+ * Superfluous
+ */
+#container {
+    cursor: move;
+    padding: 10px;
+    background: url(../../lib/img/noise.bg.png);
+    
+    .page {
+        background-color: rgba(255,255,255,0.3);
+        border: 1px solid rgba(0,0,0,0.7);
+        margin: 10px;
+        
+        -webkit-box-shadow: 0px 1px 5px rgba(0,0,0,0.7);
+        
+        &.focused {
+            border-color: red;
+            -webkit-box-shadow: 0px 1px 5px rgba(0,0,0,0.6);
+        }
+        
+        &.disabled {
+        	border-color: silver;
+        	-webkit-box-shadow: 0px 1px 5px rgba(0,0,0,0.3);
+        }
+    }
+}
+
+nav {
+	color: #fff;
+	.gradient(#444, #222);
+	
+	-webkit-box-shadow: 0px 0px 5px #333;
+
+	 li {
+		min-width: 25px;
+		padding: 0 5px;
+		color: #fff !important;
+		cursor: pointer;
+		
+		&:hover {
+			background-color: rgba(255,255,255,0.1);
+		}
+	}
+}

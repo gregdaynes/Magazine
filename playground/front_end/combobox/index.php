@@ -15,6 +15,7 @@
 	<script src="../../lib/js/mootools.js"></script>
 	<script src="../../lib/js/mootools-more.js"></script>
 	<script src="../../lib/js/spin.js"></script>
+	<script src="../../lib/js/scroll.js"></script>
 </head>
 <body>
 
@@ -51,7 +52,6 @@
 		<div id="wrapper" class="wrapper"></div>
 	</div>
 	
-	<script src="./scroll.js"></script>
 	<script src="./nav.js"></script>
 </body>
 </html>

@@ -103,16 +103,3 @@ var sum = function(array){
 };
 
 })();
-
-
-window.addEvent('domready', function(){
-	
-	// make content scrollbox
-    var element = $('content');
-        
-    new Drag.Scroll(element);
-    
-    // must give scroll box height or it fails 
-    element.setStyle('height', window.getSize().y - 30);
-
-});
