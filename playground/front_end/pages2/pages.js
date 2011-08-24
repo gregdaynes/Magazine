@@ -217,8 +217,8 @@ var Pages = new Class({
 			
 			// define new page dimensions
 			newPageWidth = pageWidth + borderX + marginX + paddingX,
-			newPageHeight = pageHeight + borderY + marginY + paddingX;
-		
+			newPageHeight = pageHeight + borderY + marginY + paddingY;
+				
 		// set wrapper size	
 		var wrapper = this.wrapper.setStyles({
 					      'width':  newPageWidth * this.options.visiblePages,
@@ -466,6 +466,8 @@ var Pages = new Class({
 		// start logging
 		this.log(['function', 'zoom']);
 		
+		
+				
 		// update currentZoom
 		this.options.currentZoom = this.options.currentZoom + direction;
 		
@@ -490,6 +492,8 @@ var Pages = new Class({
 			return false;
 			};
 		
+		$(document).fireEvent('zoom');
+		
 		return true;		
 	},
 	
@@ -503,7 +507,7 @@ var Pages = new Class({
 	log: function(commandArray) {
 	
 		// logging enabled
-		if (this.options.logging) {
+		if (this.options.logging === true) {
 			
 			// create log if not found
 			if (!this.consoleLog) {

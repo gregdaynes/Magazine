@@ -1,45 +1,98 @@
 window.addEvent('domready', function() {
-    magazine = new Pages();
+    var resizeContainer = function() {
+    	var container  = $('container'),
+    		wrapper    = container.getElement('.wrapper'),
+    		wrapperX   = wrapper.getSize().x,
+    		wrapperY   = wrapper.getSize().y,
+    		windowX    = window.getSize().x,
+    		windowY    = window.getSize().y;
+    	
+    	var newX = windowX;	
+    	if (wrapperX > windowX) {
+    		newX = wrapperX;
+    	}
+    	
+    	var newY = windowY;	
+    	if (wrapperY > windowY) {
+    		newY = wrapperY;
+    	}
+    	
+    	$('container').setStyles({
+    		'width': newX,
+    		'height': newY
+    	});
+    };
     
+    /**
+     * logic
+     *
+     * a touch interface should render like a scrollable page
+     * otherwise we use scroll.js to add a drag.move functionality
+     */
+    
+    // touch interface
     if (Modernizr.touch) {
+    	    	
+    	var toolbar = Asset.javascript('pages.toolbar.js', {
+			onLoad: function() {
+				// create magazine
+				magazine = new Pages({
+					pageUrl: '../../folder_iterator/clean_page.php',
+					logging: false,
+					currentZoom: 2,
+					visiblePages: 1
+					});
+					
+				// removes boilerplates overflow
+				$(document).html.setStyles({
+					'overflow-y': 'scroll'
+				});
+				
+			}
+		});
         
-        /**
-         * we can touch
-         * wrapper + container should have scroll bars to handle scrolling about
-         * sort of behaving like iframes
-         */
-        console.log('touchable');
         
-        $(document).html.setStyle('overflow-y', 'auto');
-        $('container').setStyles({
-            'width': $('wrapper').getSize().x,
-            'height': $('wrapper').getSize().y
+        
+        document.addEvent('zoom', function() {
+        	resizeContainer();
+        });
+        
+        window.addEvent('load', function() {
+        	resizeContainer();
         });
         
     } else {
         
-        /**
-         * we can't touch
-         * need to use mootools drag.move to give drag feeling
-         */
-        console.log('not touchable');
-        
+        // load extra classes
+        var toolbar = Asset.javascript('pages.toolbar.js'),
+        	keybind = Asset.javascript('pages.keybindings.js', {
+        		onLoad: function() {
+        			// create magazine
+        			magazine = new Pages({
+        				pageUrl: '../../folder_iterator/clean_page.php',
+        				logging: false,
+        				});
+        		}
+        	});
+
         // load scroll.js for drag abilities
-        // make content scrollbox                    
         var scrolljs = Asset.javascript('../../lib/js/scroll.js', {
             onLoad: function(){
                 // make content scrollbox                    
                 new Drag.Scroll($('container'));
                 
-                // must give scroll box height or it fails 
-                $('container').setStyle('height', window.getSize().y - $('toolbar').getSize().y);
+                // must give scroll box height or it fails
+                var windowY = window.getSize().y,
+                	toolbarY = $('toolbar').getSize().y;
+                	
+                $('container').setStyle('height', windowY - toolbarY);
             }
         });
         
         window.addEvent('resize', function() {
-            $('container').setStyle('height', window.getSize().y - $('toolbar').getSize().y);
+        	resizeContainer();
         });
-    }
-    
+        
+    };
     
 });
