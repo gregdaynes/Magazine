@@ -68,6 +68,4 @@ if (is_dir($dir)) {
 		
 		echo '</div>';
 	}
-} else {
-	header("HTTP/1.0 404 Not Found");
 }

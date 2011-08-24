@@ -35,11 +35,11 @@ var Pages = new Class(
                                      }.bind(this));
         this.buttons.single_page = this.toolbar.getElement('[class~='+this.options.singlePage+']').addEvent('click', function() {
                                          this.options.visiblePages = 1;
-                                         this.fadePages();
+                                         this.loadPageContent();
                                      }.bind(this));
         this.buttons.double_page = this.toolbar.getElement('[class~='+this.options.doublePage+']').addEvent('click', function() {
                                          this.options.visiblePages = 2;
-                                         this.fadePages();
+                                         this.loadPageContent();
                                      }.bind(this));
     }
 });
