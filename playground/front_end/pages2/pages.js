@@ -1,4 +1,4 @@
-//
+                                                                              //
 /*!
  * Pages
  * @author	  Gregory Daynes (http://jevolve.net)
@@ -37,7 +37,8 @@ var Pages = new Class({
 			 '4': { 'x': 2048, 'y': 2669 }},
 			 
 		// general options
-		logging: true // enable logging
+		logging: true, // enable logging
+		pageUrl: 'http://localhost/'
 	},
 	
 	/**
@@ -97,7 +98,7 @@ var Pages = new Class({
 		if (!loadPage) {
 			this.log(['comment', 'loadPageContent failed']);
 			return false;
-			}
+			};
 			
 		// stop logging
 		this.log(['stop']);
@@ -121,14 +122,12 @@ var Pages = new Class({
 		
 		// get container -> adopt new wrapper element
 		if (this.container.adopt(this.wrapper)) {
-			this.log(['comment', 'container adopted wrapper']);
 			return true;
 			};
 		
 		// adoption failed
 		this.log(['comment', 'container failed to adopt wrapper']);
 		return false;
-		
 	},
 	
 	/**
@@ -137,8 +136,9 @@ var Pages = new Class({
 	 * function
 	 * 
 	 * create an hidden, empty page as a child of wrapper, with pageClass
-	 * measure page width and height including margin, padding and border widths
-	 * assign measurments to options for later use and finally delete new page
+	 * measure page width and height including margin, padding and border
+	 * widths assign measurments to options for later use and finally
+	 * delete new page
 	 */
 	measurePage: function() {
 		// start logging
@@ -152,47 +152,42 @@ var Pages = new Class({
 				'height': this.options.zoomLevels[this.options.currentZoom].y,
 				'display': 'hidden'
 				}
-			});
-			this.log(['comment', 'measuring page created']);
+		});
 		
 		// wrapper -> adopt new page element
 		if (this.wrapper.adopt(page)) {
-			this.log(['comment', 'measuring page adopted']);
 			
 			// measure page
-			pageMeasurements = page.getComputedSize({
+			pM = page.getComputedSize({
 				'styles': ['margin', 'padding', 'border']
 				});
-				this.log(['comment', 'measuring page measured']);
 			
 			// define pageSize for later use
 			this.pageSize = {
 				'border': {
-					'x': pageMeasurements['border-left-width'] + pageMeasurements['border-right-width'],
-					'y': pageMeasurements['border-top-width'] + pageMeasurements['border-bottom-width']
+					'x': pM['border-left-width'] + pM['border-right-width'],
+					'y': pM['border-top-width']  + pM['border-bottom-width']
 					},
 				'margin': {
-					'x': pageMeasurements['margin-left'] + pageMeasurements['margin-right'],
-					'y': pageMeasurements['margin-top'] + pageMeasurements['margin-bottom']
+					'x': pM['margin-left'] + pM['margin-right'],
+					'y': pM['margin-top']  + pM['margin-bottom']
 					},
 				'padding': {
-					'x': pageMeasurements['padding-left'] + pageMeasurements['padding-right'],
-					'y':	pageMeasurements['padding-top'] + pageMeasurements['padding-bottom']
+					'x': pM['padding-left'] + pM['padding-right'],
+					'y': pM['padding-top']  + pM['padding-bottom']
 					} 
 				};
-				this.log(['comment', 'pageSize defined']);
 			
 			// destroy new page element
 			var destroy_page = page.destroy();
 			if (!destroy_page) {
-				this.log(['comment', 'measuring page destroyed']);
 				return true;
 				};
 			
 			this.log(['comment', 'failed to destroy measuring page']);
 			return false;
 			
-			};
+		};
 		
 		// adoption failed
 		this.log(['comment', 'wrapper failed to adopt measuring page']);
@@ -224,7 +219,6 @@ var Pages = new Class({
 			// define new page dimensions
 			newPageWidth = pageWidth + borderX + marginX + paddingX,
 			newPageHeight = pageHeight + borderY + marginY + paddingX;
-			this.log(['comment', 'dimensions defined']);
 		
 		// set wrapper size	
 		var wrapper = this.wrapper.setStyles({
@@ -232,7 +226,6 @@ var Pages = new Class({
 					      'height': newPageHeight
 					      });
 		if (wrapper) {
-			this.log(['comment', 'wrapper resized']);
 			return true;
 			};
 		
@@ -246,8 +239,8 @@ var Pages = new Class({
 	 * function
 	 * 
 	 * checks wrapper for pages, and generates them if necessary. If pages are
-	 * found loadPageContent() goes through each one and assigns the page and Id.
-	 * once each page has an Id, requestPageContent() is fired.
+	 * found loadPageContent() goes through each one and assigns the page and
+	 * Id. once each page has an Id, requestPageContent() is fired.
 	 */
 	loadPageContent: function() {
 		// start logging
@@ -258,7 +251,6 @@ var Pages = new Class({
 		
 		// if pages are found and we have the number of pages we need
 		if (pages.length >= this.options.visiblePages) {		
-			this.log(['comment', 'sufficient pages found']);
 			
 			/**
 			 * logic
@@ -272,10 +264,8 @@ var Pages = new Class({
 				if ((this.options.currentPage) % 2) {
 					pageModifier = -1;
 					this.log(['comment', 'pageModifier changed']);
-					
 					};
-				};
-			
+			};
 			
 			pages.each(function(page, i) { // bound to this
 				
@@ -284,7 +274,6 @@ var Pages = new Class({
 					this.options.currentPage = 1;
 					this.log(['comment', 'page 0 set to 1']);
 					};
-				
 				
 				// define new page id
 				newPageId = this.options.currentPage + pageModifier + i;
@@ -296,214 +285,268 @@ var Pages = new Class({
 					return false;
 					};
 				
-				this.log(['comment', 'page set id: '+newPageId]);
-				
-				}.bind(this));
-			
-			this.log('	pages setup');
-			this.requestPageContent();
+			}.bind(this));
 						
-		} else { // generate pages - then come back and check if there are pages
-			
-			this.log('	not enough pages in wrapper');
-			
-			var generatePages = this.generatePages();
-			if (generatePages) {
-				this.log('	pages generated');
+			// get page content
+			var pageContent = this.requestPageContent();
+			if (!pageContent) {
+				this.log(['comment', 'requestPageContent failed']);
+				return false;
 			}
+		} else { 
 			
-			this.log('	checking for correct page count');
+			// not enough / no pages found
+			this.log(['comment', 'insufficient page count']);
+			
+			// generate pages
+			var generatePages = this.generatePages();
+			if (!generatePages) {
+				this.log(['comment', 'generatePages failed']);
+				return false;
+				};
+			
+			// go back to the beginning and check again
 			this.loadPageContent();
 		}
 		
 		return true;
 	},
 	
-	sizePages: function() {
-		this.log('sizePages()');
-		
-		this.log('	each page loop');
-		this.wrapper.getChildren().each(function(page, i) {
-			var setPageSize = page.setStyles({
-									'width': this.options.zoomLevels[this.options.currentZoom].x,
-									'height': this.options.zoomLevels[this.options.currentZoom].y
-								});
-			if (!setPageSize) {
-				this.log('	page ' + page.getProperty('id') + ' failed to resize');
-				return false;
-			}
-			this.log('	page ' + page.getProperty('id') + ' resized');
-		}.bind(this));
-		
-		this.log('	pages resized');
-		
-		return true;
-	},
-	
+	/**
+	 * generatePages
+	 *
+	 * function
+	 * 
+	 * create new page elements to satisfy the loadPageContent function
+	 */
 	generatePages: function() {
+		// start logging
+		this.log(['function', 'generatePages']);
 		
-		this.log('generatePages()');
-		
+		// clear existing pages
 		var emptyWrapper = this.wrapper.empty();
-		
 		if (!emptyWrapper) {
-			this.log('	wrapper failed to empty');
+			this.log(['comment', 'failed clearing wrapper contents']);
 			return false;
-			
-		} else {
-			this.log('	wrapper emptied');
-		}
+			};
 		
-		this.log('	looping page creation');
+		// zoom levels
+		var zoomX = this.options.zoomLevels[this.options.currentZoom].x,
+			zoomY = this.options.zoomLevels[this.options.currentZoom].y
 		
 		for(i=0;i<this.options.visiblePages;i++) {
 			
-			this.log('	creating page '+(i+1));
-							
+			// new page element			
 			var newPage	= this.wrapper.adopt(new Element('div', {
-								'class':	this.options.pageClass,
-								'styles': {
-									'width': this.options.zoomLevels[this.options.currentZoom].x,
-									'height': this.options.zoomLevels[this.options.currentZoom].y
-								}
-							}).addClass('zoom_'+this.options.currentZoom));
-			
-			if (newPage) {
-				this.log('	page '+(i+1)+' created');			
-			} else {
-				this.log('	failed to create page '+(i+1));
+						      'class':  this.options.pageClass,
+							  'styles': {
+							      'width':  zoomX,
+							      'height': zoomY
+						          }}));
+			if (!newPage) {
+				this.log(['comment', 'failed to create page '+(i+1)]);
 				return false;
-			}
-		}
+				};
+		};
 		
-		this.log('	pages created');
 		return true;
 	},
 	
+	/**
+	 * requstPageContent
+	 *
+	 * function
+	 * 
+	 * request html to place inside page
+	 */
 	requestPageContent: function() {
-		this.log('requestPageContent()');
+		// start logging
+		this.log(['function', 'requestPageContent']);
 		
-		this.log('	each page loop');		
+		// get pages
 		this.wrapper.getChildren().each(function(page) { // bound
 			
+			// check page has id
 			var pageId = page.getProperty('id');
 			if (!pageId) {
-				this.log('	no page id, can\'t continue');
+				this.log(['comment', 'no page id']);
 				return false;
-			};
+				};
 			
+			// empty page of previous content
 			var emptyPage = page.empty();
 			if (!emptyPage) {
-				this.log('	page could not be emptied');
+				this.log(['comment', 'page could not be emptied']);
 				return false;
-			}
-			
-			this.log('	starting request');
-						
-			new Request.HTML({
-				url: '../../folder_iterator/clean_page.php',
+				};
+								
+			// html request
+			// note: can't log actions in this
+			var pageRequest = new Request.HTML({
+				url: this.options.pageUrl,
 				onSuccess: function(response) {
-					var adoptResponse = page.adopt(response);
-				}
+					page.adopt(response);
+					},
+				onFailure: function() {
+					}
 			}).get({
 				'p': pageId,
 				'z': this.options.currentZoom
-			});
+				});
+			
 		}.bind(this));
 		
-		this.log('	finished requestPageLoop');
-		return true;
-	},	
-	
-	advance: function(direction) {
-		this.log('start');
-		this.log('advance()');
-		this.log('	current page ' + this.options.currentPage);
-		
-		this.options.currentPage = this.options.currentPage + (direction * this.options.visiblePages);
-		
-		this.log('	next page ' + this.options.currentPage);
-		
-		var loadPage = this.loadPageContent();
-		
-		if (!loadPage) {
-			this.log('page failed to advance ' + direction);
-			this.log('stop');
-			return false;
-		}
-		
-		this.log('page advanced '+direction);
-		this.log('stop');
 		return true;
 	},
 	
-	zoom: function(direction) {
-		this.log('start');
-		this.log('zoom()');
-		this.log('	current zoom ' + this.options.currentZoom);
+	/**
+	 * sizePages
+	 *
+	 * function
+	 * 
+	 * change the size of the current pages and adjust pageSize
+	 */
+	sizePages: function() {
+		// start logging
+		this.log(['function', 'sizePages']);
 		
+		// zoom levels
+		var zoomX = this.options.zoomLevels[this.options.currentZoom].x,
+			zoomY = this.options.zoomLevels[this.options.currentZoom].y
+		
+		// resize each page
+		this.wrapper.getChildren().each(function(page) {
+			var setPageSize = page.setStyles({
+							      'width': zoomX,
+								  'height': zoomY
+								  });
+			if (!setPageSize) {
+				this.log(['function', 'failed to resize page']);
+				return false;
+			    };
+			    
+		}.bind(this));
+				
+		return true;
+	},
+	
+	/**
+	 * advance
+	 *
+	 * function
+	 * 
+	 * advance page by direction
+	 */
+	advance: function(direction) {
+		// start logging
+		this.log(['function', 'advance']);
+		
+		// update current page
+		currentPage = this.options.currentPage;
+		nextPage	= direction * this.options.visiblePages;
+		this.options.currentPage = currentPage + nextPage;
+				
+		// load page
+		var loadPage = this.loadPageContent();
+		if (!loadPage) {
+			this.log(['comment', 'failed to advance page]']);
+			return false;
+			};
+		
+		return true;
+	},
+	
+	/**
+	 * zoom
+	 *
+	 * function
+	 * 
+	 * zoom page by direction.
+	 */
+	zoom: function(direction) {
+		// start logging
+		this.log(['function', 'zoom']);
+		
+		// update currentZoom
 		this.options.currentZoom = this.options.currentZoom + direction;
 		
-		this.log('	next zoom ' + this.options.currentZoom);
-		
+		// resize wrapper
 		var sizeWrapper = this.sizeWrapper();
-		
 		if (!sizeWrapper) {
-			this.log('zoom failed to resize wrapper');
-			this.log('stop');
+			this.log(['comment', 'failed to resize wrapper']);
 			return false;
-		}
+			};
 		
+		// resize pages
 		var sizePages = this.sizePages();
-		
 		if (!sizePages) {
-			this.log('zoom failed to resize pages');
-			this.log('stop');
+			this.log(['comment', 'failed to resize pages']);
 			return false;
-		}
+			};
 		
+		// load page contents
 		var loadPage = this.loadPageContent();
-		
 		if (!loadPage) {
-			this.log('zoom failed to reload pages');
-			this.log('stop');
+			this.log(['comment', 'failed to load page content']);
 			return false;
-		}
-		
-		this.log('zoom changed ' + direction);
-		this.log('stop');
+			};
 		
 		return true;		
 	},
 	
+	/**
+	 * log
+	 *
+	 * function
+	 * 
+	 * create and output a log of events, functions and actions performed
+	 */
 	log: function(commandArray) {
+	
+		// logging enabled
 		if (this.options.logging) {
+			
+			// create log if not found
 			if (!this.consoleLog) {
 				this.consoleLog = [];
-			};
+				};
 			
+			// start / stop commands
 			if (commandArray.length == 1) {
-				if (commandArray[0] == 'start') {
-					this.consoleLog.empty();
-					console.log('--- START OF LOG ---');
-				}
 				
+				// start log
+				if (commandArray[0] == 'start') {
+					// empty log
+					this.consoleLog.empty();
+					
+					// output start to console
+					console.log('--- START OF LOG ---');
+					};
+				
+				// stop log
 				if (commandArray[0] == 'stop') {
+					
+					// output current log to console
 					this.consoleLog.each(function(message, i) {
 						console.log(message);
 					});
 					console.log('--- END OF LOG ---');
-				}
+					};
 			} else {
+				
+				// log comments
 				logPrefix = '';
+				
+				// function or '10 spaces' (length of word string "function: "
 				if (commandArray[0] === 'function') {
 					logPrefix = 'function: ';
-				} else {
+					} else {
 					logPrefix = '          ';
-				}
-									
+					};
+				
+				// append comment to log		
 				this.consoleLog.push(logPrefix+commandArray[1]);
-			}
+			};
 		};
 	}
 });
