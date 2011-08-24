@@ -1,4 +1,3 @@
-                                                                              //
 /*!
  * Pages
  * @author	  Gregory Daynes (http://jevolve.net)
@@ -250,7 +249,7 @@ var Pages = new Class({
 		pages = this.wrapper.getChildren('.'+this.options.pageClass);
 		
 		// if pages are found and we have the number of pages we need
-		if (pages.length >= this.options.visiblePages) {		
+		if (pages.length == this.options.visiblePages) {		
 			
 			/**
 			 * logic
