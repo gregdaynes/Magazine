@@ -33,7 +33,7 @@ var Pages = new Class({
         // Set the class options
         this.setOptions(options);
         
-        this.log = [];
+        this.log('start');
         
         // major elements
         this.container = document.id(this.options.container);
@@ -42,39 +42,52 @@ var Pages = new Class({
        this.initializeWrapper();
        this.measurePage();
        this.sizeWrapper();
+       this.loadPageContent();
        
        // output log
-       this.showLog();          
+       this.log('stop');          
     },
     
-    showLog: function() {
+    log: function(command) {
         if (this.options.logging) {
-            this.log.each(function(message, i) {
-                console.log(i+': '+message);
-            });
-            console.log('---');
+            if (!this.consoleLog) {
+                this.consoleLog = [];
+            };
+        
+            if (command == 'start') {
+                this.consoleLog.empty();
+            } else if (command == 'stop') {
+                this.consoleLog.each(function(message, i) {
+                    console.log(message);
+                });
+                console.log('---');
+            } else {
+            
+                this.consoleLog.push(command);
+            };
+
         };
     },
     
     initializeWrapper: function() {       
-        this.log.push('initialize wrapper');
+        this.log('initializeWrapper()');
         
         this.wrapper = new Element('div', {
             'class': 'wrapper'
         });
         
         if (this.container.adopt(this.wrapper)) {
-            this.log.push('container adopted wrapper');
+            this.log('   container adopted wrapper');
             return true;
         }
         
-        this.log.push('container failed to adopt wrapper');
+        this.log('   container failed to adopt wrapper');
         return false;
         
     },
     
     measurePage: function() {
-        this.log.push('measure page');
+        this.log('measurePage()');
         
         page = new Element('div', {
             'class': this.options.pageClass+' measure',
@@ -85,16 +98,16 @@ var Pages = new Class({
             }
         });
         
-        this.log.push('measuring page created');
+        this.log('   measuring page created');
         
         if (this.wrapper.adopt(page)) {
-            this.log.push('wrapper adopted measuring page');
+            this.log('   wrapper adopted measuring page');
             
             pageMeasurements = page.getComputedSize({
                 'styles': ['margin', 'padding', 'border']
             });
             
-            this.log.push('measuring page measured');
+            this.log('   measuring page measured');
                     
             this.pageSize = {
                 'border': {
@@ -111,27 +124,27 @@ var Pages = new Class({
                 } 
             };
             
-            this.log.push('this.pageSize defined');
+            this.log('   this.pageSize defined');
             
             var destroy_page = page.destroy();
             
             if (!destroy_page) {
-                this.log.push('measuring page destroyed');
+                this.log('   measuring page destroyed');
                 
                 return true;
             }
             
-            this.log.push('failed to destroy measuring page');
+            this.log('   failed to destroy measuring page');
             return false;
             
         }
         
-        this.log.push('wrapper failed to adopt measuring page');
+        this.log('   wrapper failed to adopt measuring page');
         return false;
     },
     
     sizeWrapper: function() {
-        this.log.push('size wrapper');
+        this.log('sizeWrapper()');
         
         var pageWidth = this.options.zoomLevels[this.options.currentZoom].x,
             pageHeight = this.options.zoomLevels[this.options.currentZoom].y,
@@ -140,113 +153,249 @@ var Pages = new Class({
             marginX = this.pageSize.margin.x,
             marginY = this.pageSize.margin.y,
             paddingX = this.pageSize.padding.x,
-            paddingY = this.pageSize.padding.y;
+            paddingY = this.pageSize.padding.y,
                  
-        var newPageWidth = pageWidth + borderX + marginX + paddingX,
+            newPageWidth = pageWidth + borderX + marginX + paddingX,
             newPageHeight = pageHeight + borderY + marginY + paddingX;
         
-        this.log.push('sizes defined');
+        this.log('   sizes defined');
           
         var resize = this.wrapper.setStyles({
                          'width':  newPageWidth * this.options.visiblePages,
                          'height': newPageHeight
                      });
         if (resize) {
-            this.log.push('wrapper resized');
+            this.log('   wrapper resized');
             return true;
         }
         
-        this.log.push('wrapper failed to resize');
+        this.log('   wrapper failed to resize');
         return false;
     },
     
-    sizePages: function() {    
+    sizePages: function() {
+        this.log('sizePages()');
+        
+        this.log('   each page loop');
         this.wrapper.getChildren().each(function(page, i) {
-            page.setStyles({
-                'width': this.options.zoomLevels[this.options.currentZoom].x,
-                'height': this.options.zoomLevels[this.options.currentZoom].y
-            });
+            var setPageSize = page.setStyles({
+                                  'width': this.options.zoomLevels[this.options.currentZoom].x,
+                                  'height': this.options.zoomLevels[this.options.currentZoom].y
+                              });
+            if (!setPageSize) {
+                this.log('   page ' + page.getProperty('id') + ' failed to resize');
+                return false;
+            }
+            this.log('   page ' + page.getProperty('id') + ' resized');
         }.bind(this));
+        
+        this.log('   pages resized');
+        
+        return true;
     },
     
     loadPageContent: function() {
-        pages = this.wrapper.getChildren('div.page');
+        this.log('loadPageContent()');
         
+        pages = this.wrapper.getChildren('div.page');
+            
         if (pages.length >= this.options.visiblePages) {        
             
-            pages.each(function(page, i) {
-                                
-                if (this.options.currentPage === 0) {
+            this.log('   page count matches visible pages option');
+            
+            this.log('   setup page modifier');
+            pageModifier = 0;
+            if (this.options.visiblePages >= 2) {
+                
+                this.log('   more than 1 visible page');
+                
+                if ((this.options.currentPage) % 2) {
+                    this.log('   current page righthand page number');
+                    
+                    pageModifier = -1;
+                } else {
+                    this.log('   current page lefthand page number');
+                    
+                    pageModifier = 0;
+                }
+            }
+            
+            this.log('   loop set page id');
+            pages.each(function(page, i) { // bound to this
+                
+                if (this.options.currentPage <= 0) {
+                    this.log('   current page is <= 0');
+                    
                     this.options.currentPage = 1;
+                    
+                    this.log('   current page is now 1');
+                }                
+                
+                this.log('   generating page id');
+                
+                newPageId = this.options.currentPage + pageModifier + i;
+                
+                if (pages[i].set('id', newPageId)) {
+                    this.log('   page id set '+newPageId);
+                } else {
+                    this.log('   failed to set page id');
+                    return false;
                 }
-                
-                pageModifier = 0;
-                if (this.options.visiblePages >= 2) {
-                    if ((this.options.currentPage) % 2) {
-                        pageModifier = -1 + i;
-                    } else {
-                        pageModifier = i;
-                    }
-                }
-                
-                newPageId = this.options.currentPage + pageModifier;
-
-                pages[i].set('id', newPageId);
-                
                 
             }.bind(this));
             
-            this.requestPages();
+            this.log('   pages setup');
+            this.requestPageContent();
                         
         } else { // generate pages - then come back and check if there are pages
-            this.generatePages();
+            
+            this.log('   not enough pages in wrapper');
+            
+            var generatePages = this.generatePages();
+            if (generatePages) {
+                this.log('   pages generated');
+            }
+            
+            this.log('   checking for correct page count');
             this.loadPageContent();
         }
+        
+        return true;
     },
     
     generatePages: function() {
-        this.wrapper.empty();
+        
+        this.log('generatePages()');
+        
+        var emptyWrapper = this.wrapper.empty();
+        
+        if (!emptyWrapper) {
+            this.log('   wrapper failed to empty');
+            return false;
+            
+        } else {
+            this.log('   wrapper emptied');
+        }
+        
+        this.log('   looping page creation');
         
         for(i=0;i<this.options.visiblePages;i++) {
             
-            this.wrapper.adopt(new Element('div', {
-                'class':  this.options.pageClass,
-                'styles': {
-                    'width': this.options.zoomLevels[this.options.currentZoom].x,
-                    'height': this.options.zoomLevels[this.options.currentZoom].y
-                }
-            }).addClass('zoom_'+this.options.currentZoom));           
+            this.log('   creating page '+(i+1));
+                           
+            var newPage  = this.wrapper.adopt(new Element('div', {
+                                'class':  this.options.pageClass,
+                                'styles': {
+                                    'width': this.options.zoomLevels[this.options.currentZoom].x,
+                                    'height': this.options.zoomLevels[this.options.currentZoom].y
+                                }
+                            }).addClass('zoom_'+this.options.currentZoom));
+            
+            if (newPage) {
+                this.log('   page '+(i+1)+' created');          
+            } else {
+                this.log('   failed to create page '+(i+1));
+                return false;
+            }
         }
+        
+        this.log('   pages created');
+        return true;
     },
     
-    requestPages: function() {
-        zoom = this.options.currentZoom;
+    requestPageContent: function() {
+        this.log('requestPageContent()');
         
-        this.wrapper.getChildren().each(function(page) {
-            pageId = page.getProperty('id');
-            page.empty();
+        this.log('   each page loop');       
+        this.wrapper.getChildren().each(function(page) { // bound
+            
+            var pageId = page.getProperty('id');
+            if (!pageId) {
+                this.log('   no page id, can\'t continue');
+                return false;
+            };
+            
+            var emptyPage = page.empty();
+            if (!emptyPage) {
+                this.log('   page could not be emptied');
+                return false;
+            }
+            
+            this.log('   starting request');
                         
             new Request.HTML({
                 url: '../../folder_iterator/clean_page.php',
                 onSuccess: function(response) {
-                    page.adopt(response);
+                    var adoptResponse = page.adopt(response);
                 }
             }).get({
                 'p': pageId,
-                'z': zoom
+                'z': this.options.currentZoom
             });
-        });
+        }.bind(this));
+        
+        this.log('   finished requestPageLoop');
+        return true;
     },    
     
-    advance: function(direction) {    
+    advance: function(direction) {
+        this.log('start');
+        this.log('advance()');
+        this.log('   current page ' + this.options.currentPage);
+        
         this.options.currentPage = this.options.currentPage + (direction * this.options.visiblePages);
-        this.loadPageContent();
+        
+        this.log('   next page ' + this.options.currentPage);
+        
+        var loadPage = this.loadPageContent();
+        
+        if (!loadPage) {
+            this.log('page failed to advance ' + direction);
+            this.log('stop');
+            return false;
+        }
+        
+        this.log('page advanced '+direction);
+        this.log('stop');
+        return true;
     },
     
     zoom: function(direction) {
+        this.log('start');
+        this.log('zoom()');
+        this.log('   current zoom ' + this.options.currentZoom);
+        
         this.options.currentZoom = this.options.currentZoom + direction;
-        this.sizeWrapper();
-        this.sizePages();
-        this.loadPageContent();
+        
+        this.log('   next zoom ' + this.options.currentZoom);
+        
+        var sizeWrapper = this.sizeWrapper();
+        
+        if (!sizeWrapper) {
+            this.log('zoom failed to resize wrapper');
+            this.log('stop');
+            return false;
+        }
+        
+        var sizePages = this.sizePages();
+        
+        if (!sizePages) {
+            this.log('zoom failed to resize pages');
+            this.log('stop');
+            return false;
+        }
+        
+        var loadPage = this.loadPageContent();
+        
+        if (!loadPage) {
+            this.log('zoom failed to reload pages');
+            this.log('stop');
+            return false;
+        }
+        
+        this.log('zoom changed ' + direction);
+        this.log('stop');
+        
+        return true;        
     }    
 });
