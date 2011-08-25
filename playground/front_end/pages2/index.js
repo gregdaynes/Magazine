@@ -33,25 +33,26 @@ window.addEvent('domready', function() {
     // touch interface
     if (Modernizr.touch) {
     	    	
-    	var toolbar = Asset.javascript('pages.toolbar.js', {
-			onLoad: function() {
-				// create magazine
-				magazine = new Pages({
-					pageUrl: '../../folder_iterator/clean_page.php',
-					logging: false,
-					currentZoom: 2,
-					visiblePages: 1
-					});
-					
-				// removes boilerplates overflow
-				$(document).html.setStyles({
-					'overflow-y': 'scroll'
-				});
-				
-			}
-		});
-        
-        
+    	
+    	var toolbar = Asset.javascript('../../lib/js/pages.toolbar.js', {
+    			onLoad: function() {
+    				// create magazine
+    				magazine = new Pages({
+    					pageUrl: '../../folder_iterator/clean_page.php',
+    					logging: false,
+    					currentZoom: 2,
+    					visiblePages: 1
+    					});
+    			}
+    		});
+    	
+		// create magazine
+		
+			
+		// removes boilerplates overflow
+		$(document).html.setStyles({
+			'overflow-y': 'scroll'
+		});        
         
         document.addEvent('zoom', function() {
         	resizeContainer();
@@ -64,8 +65,8 @@ window.addEvent('domready', function() {
     } else {
         
         // load extra classes
-        var toolbar = Asset.javascript('pages.toolbar.js'),
-        	keybind = Asset.javascript('pages.keybindings.js', {
+        var toolbar = Asset.javascript('../../lib/js/pages.toolbar.js'),
+        	keybind = Asset.javascript('../../lib/js/pages.keybindings.js', {
         		onLoad: function() {
         			// create magazine
         			magazine = new Pages({
