@@ -30,24 +30,46 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 		+ Logo view + upload
 		
 ### Playground
-+ <strike>Page loading indicator</strike>
-	+ spin.js
++ Front End
+	+ Javascript Class
+		+ pages
+		+ Keyboard Navigation
+			+ &larr;	Previous Page
+			+ &rarr;	Next Page
+			+ &uarr;	Zoom In
+			+ &darr;	Zoom Out
+			+ P		Previous Page
+			+ N		Next Page
+			+ \+		Zoom in
+			+ \-		Zoom Out
+			+ T		Hide toolbar
+			+ S		Single Page
+			+ D		Double Page
+	+ Page loading indicator: spin.js	
+	+ page animations
+		+ fade page out
+		+ fade page in
+		+ resize page
+		+ resize wrapper
+	+ Lazy Load images
+	+ iOS features
+		+ viewport size detected zoom level
+		+ orientation page count
+		+ swipe gestures
+			+ right to left: next page
+			+ left to right: previous page
+			+ bottom to top: zoom out
+			+ top to bottom: zoom in
+			+ ---
+			+ gestures should not interfere with panning
+			+ ---
+			+ http://padilicious.com/code/touchevents/
+		+ remove toolbar / make buttons bigger
+		+ home screen icon
+		+ splash page / startup page
 
-+ <strike>Mouse Wheel zooming</strike>
-+ <strike>Keyboard Navigation</strike>
-	+ <strike>&larr;	Previous Page</strike>
-	+ <strike>&rarr;	Next Page</strike>
-	+ <strike>&uarr;	Zoom In</strike>
-	+ <strike>&darr;	Zoom Out</strike>
-	+ <strike>P			Previous Page</strike>
-	+ <strike>N			Next Page</strike>
-	+ <strike>\+		Zoom in</strike>
-	+ <strike>\-		Zoom Out</strike>
-	+ <strike>H			Hide toolbar</strike>
-	+ <strike>S			Single Page</strike>
-	+ <strike>D			Double Page</strike>
-
-	
++ Back End
+	+ PDF parser
 ---  
 
 ### Future
@@ -66,16 +88,7 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 + preload next page
 + click/heatmap
 + analytics
-
-### Playground Future
-+ Fade Load page
-+ Ghosted Previous/Next Pages
-+ PDF parser
-+ Page animations
-+ Contact sheet
 + Page Flip + Binding mode
 	+ CSS3 3d transform to render pages
 	+ Look as if binded
 	+ page flip (possible curl?)
-+ Lazy Load
-	+ page tile not on screen
