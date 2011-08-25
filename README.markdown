@@ -67,6 +67,20 @@ Magazine is an attempt to ease the pain for publisher who publish a traditional 
 		+ remove toolbar / make buttons bigger
 		+ home screen icon
 		+ splash page / startup page
+		+ General
+			+ 16x16 favicon
+			+ 32x32 favicon
+		
+		+ Multitsaking
+			+ Be prepared for interruptions, and be ready to resume
+			+ Make sure your UI can handle the double-high status bar.
+				
+		+ Animation
+			+ cardflip (http://developer.apple.com/library/safari/#samplecode/CardFlip/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007646-Intro-DontLinkElementID_2)
+			+ http://developer.apple.com/library/safari/#documentation/InternetWeb/Conceptual/SafariVisualEffectsProgGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008032
+			
+		+ Multi-touch Events
+			+ http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html#//apple_ref/doc/uid/TP40006511-SW22
 
 + Back End
 	+ PDF parser
