@@ -13,15 +13,27 @@
 }
 
 /**
- * Google's Scroller stuff
+ * Scroller Stuff
  */
+// topbar
 #touchMe {
-	position: absolute;
-	top: 0;
+	position:absolute;
+	z-index:2;
+	top:0;
+	left:0;
 }
 
-.SCROLLER_FRAME {
-	width: 100%;
-	position: absolute;
-	top: 50px;
+// scroll wrapper
+#scroll_outer {
+	position:absolute; z-index:1;
+	top:50px; bottom:0px; left:0;
+	width:100%;
+	overflow:auto;
+}
+
+// scroll inner
+#scroll_inner {
+	position:absolute; z-index:1;
+	width:100%;
+	padding:0;
 }

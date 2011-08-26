@@ -1,6 +1,8 @@
 // Multi-touch & Gestures
 // http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html#//apple_ref/doc/uid/TP40006511-SW22
 
+var scroll;
+
 window.addEvent('domready', function() {
 	var touchConsole = $('touchConsole'),
 		touchLog     = $('touchLog'),
@@ -10,9 +12,7 @@ window.addEvent('domready', function() {
 		startY		 = 0,
 		endX		 = 0,
 		endY		 = 0;
-	
-		touchConsole.set('text', 'domready!');
-	
+		
 	var logEvent = function(event) {
 		touchConsole.empty();
 		Object.each(event, function(value, identifier) {
@@ -20,6 +20,12 @@ window.addEvent('domready', function() {
 		});
 		
 		touchLog.set('html', touchLog.get('html') + event.type+'; '); 
+		
+		if (scroll) {
+		    scroll.destroy();
+		    scroll = new iScroll($('scroll_outer'));
+		}
+		
 	};
 
 	

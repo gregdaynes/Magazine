@@ -1,3 +1,10 @@
+<!-- Refrence
+
+Github Gist:
+https://gist.github.com/472519
+
+-->
+
 <!doctype html>
 <head>
 	<meta charset="utf-8">
@@ -7,9 +14,6 @@
 	<!-- Mobile meta & links -->
 	
 	<!-- Reference
-	
-	Github Gist:
-	https://gist.github.com/472519
 	
 	Custom Icon and Image Creation Guidelines:
 	http://developer.apple.com/library/safari/#documentation/UserExperience/Conceptual/MobileHIG/IconsImages/IconsImages.html
@@ -80,21 +84,30 @@
 		Touch Me
 	</div>
 	
-	<div class="SCROLLER_FRAME">
-	    <div class="SCROLLER">
-	        <div id="touchLog">
-	        
-	        </div>	
-	        
-	        <div id="touchConsole">
-	        
-	        </div>
-	    </div>
-	  </div>
-	
+    <div id="scroll_outer">
+        <div id="scroll_inner">
+            <div id="touchLog">
+            
+            </div>	
+            
+            <div id="touchConsole">
+                lipsum dolor
+            </div>
+        </div>
+    </div>
+    	
 	<script src="../../lib/js/mootools.js"></script>
 	<script src="../../lib/js/less.js"></script>
 	<script src="./js/touch.js"></script>
-	<script src="./js/scroll.js"></script>
+	<script src="./js/iscroll.js"></script>
+	<script>
+	    // disable native scrolling
+	    document.addEventListener('touchmove', function (e) {  e.preventDefault(); }, false);
+	    
+	    var scroll;
+	    window.addEvent('load', function() {
+	         scroll = new iScroll('scroll_outer');
+	    });
+	</script>
 </body>
 </html>
