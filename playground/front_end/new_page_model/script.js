@@ -14,7 +14,8 @@ var sizeObject = {
 var pageSize = null,
     body = null,
     wrapper = null,
-    container = null;
+    container = null,
+    grid = null;
 
 var generateFunction = function() {	
 	
@@ -58,18 +59,21 @@ var generateFunction = function() {
 	var col = new Element('div');
 	
 	// generate grid
-	for(r=0;r<=gridY-1;r++) {
+	for(r=0;r<gridY;r++) {
 		
 		tmp = row.clone();
 		wrapper.adopt(tmp);
 		
-		for(c=0;c<=gridX-1;c++) {
+		for(c=0;c<gridX;c++) {
 			tmp.adopt(col.clone().setProperties({
 				class: 'col_'+c,
 				text:  r+', '+c
 			}));
 		}		
 	};
+	
+	// save grid for scaling
+	grid = $(document).getElements('[class~=row]').getElements('div');
 	
 	// call for images
 	
@@ -80,12 +84,13 @@ var generateFunction = function() {
 var scaler = function() {    
     scalePercentage = body.getSize().x / pageSize.x;
     
-    if (scalePercentage < 1) {
+    console.log(scalePercentage);
     
+    if (scalePercentage < 1 && scalePercentage > 0.8) {
+        
         scale = 256 * scalePercentage;	
         
-        cols = $(document).getElements('[class~=row]').getElements('div');
-        cols.each(function(el) {
+        grid.each(function(el) {
         	el.setStyle('width', scale);
         	el.setStyle('height', scale);			
         });
