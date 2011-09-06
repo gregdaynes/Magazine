@@ -1,5 +1,5 @@
 var sizeObject = {
-	 '0': { x: 2048, y: 2669 },
+	'-0': { x: 2048, y: 2669 },
 	'-1': { x: 1638, y: 2135 },
 	'-2': { x: 1310, y: 1708 },
 	'-3': { x: 1048, y: 1366 },
@@ -15,7 +15,8 @@ var pageSize = null,
     body = null,
     wrapper = null,
     container = null,
-    grid = null;
+    grid = null,
+    zoomLevel = null;
 
 var generateFunction = function() {	
 	
@@ -35,6 +36,7 @@ var generateFunction = function() {
 		// smaller size
 		if (subObj.x > body.getSize().x) {
 			pageSize = sizeObject[key];
+			zoomLevel = key;
 		}		
 
 	});
@@ -66,16 +68,18 @@ var generateFunction = function() {
 		
 		for(c=0;c<gridX;c++) {
 			tmp.adopt(col.clone().setProperties({
-				class: 'col_'+c,
+				id: 'r'+r + '_c'+c,
+				class: 'grid',
 				text:  r+', '+c
 			}));
 		}		
 	};
 	
 	// save grid for scaling
-	grid = $(document).getElements('[class~=row]').getElements('div');
+	grid = $(document).getElements('[class=grid]');
 	
 	// call for images
+	imageRequest();	
 	
 	// scale grid
 	scaler();
@@ -83,8 +87,6 @@ var generateFunction = function() {
 
 var scaler = function() {    
     scalePercentage = body.getSize().x / pageSize.x;
-    
-    console.log(scalePercentage);
     
     if (scalePercentage < 1 && scalePercentage > 0.8) {
         
@@ -103,6 +105,30 @@ var scaler = function() {
     }
 };
 
+var imageRequest = function() {
+	// each grid	
+	grid.each(function(el, i) {
+		
+		var id = el.getProperty('id').split('_');
+		var row = id[0].substr(1);
+		var col = id[1].substr(1);
+		
+		var imgRequest = new Request({
+			url: 'image.php',
+			onComplete: function(response) {
+				//el.set('html', response);
+				el.set('html', '<img src="'+response+'" style="width: 100%; height: 100%;" />');
+			}
+		}).get({
+			p: 1, // hardset page - only one during dev
+			r: row,
+			c: col,
+			z: zoomLevel
+		});
+
+		
+	});
+};
 
 window.addEvent('load', function() {
 	generateFunction();
