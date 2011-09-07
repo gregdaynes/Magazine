@@ -16,7 +16,8 @@ var pageSize = null,
     wrapper = null,
     container = null,
     grid = null,
-    zoomLevel = null;
+    zoomLevel = null,
+    htmlBackgroundSize = false;
 
 var generateFunction = function() {	
 	
@@ -57,7 +58,7 @@ var generateFunction = function() {
 		height: gridY * 256
 	});
 	
-	var row = new Element('div', { class: 'row' });
+	var row = new Element('div', { 'class': 'row' });
 	var col = new Element('div');
 	
 	// generate grid
@@ -69,20 +70,21 @@ var generateFunction = function() {
 		for(c=0;c<gridX;c++) {
 			tmp.adopt(col.clone().setProperties({
 				id: 'r'+r + '_c'+c,
-				class: 'grid',
-				text:  r+', '+c
+				'class': 'grid'
 			}));
 		}		
 	};
 	
 	// save grid for scaling
 	grid = $(document).getElements('[class=grid]');
+		
+	// scale grid
+	scaler();
 	
 	// call for images
 	imageRequest();	
 	
-	// scale grid
-	scaler();
+	
 };
 
 var scaler = function() {    
@@ -101,39 +103,72 @@ var scaler = function() {
             height: pageSize.y * scalePercentage
         });
     } else {
-        generateFunction();
+    	if (grid[0].getChildren) {
+        	generateFunction();
+        }
     }
 };
 
 var imageRequest = function() {
+	
+	windowScroll = window.getScroll();
+	
+	// filter items
+	visibleGrid = grid.filter(function(el, key) {
+		elPos = el.getPosition();
+		if (elPos.y <= (window.getSize().y + windowScroll.y)) {
+			return true;
+		}
+	});
+	
 	// each grid	
-	grid.each(function(el, i) {
-		
-		var id = el.getProperty('id').split('_');
-		var row = id[0].substr(1);
-		var col = id[1].substr(1);
-		
-		var imgRequest = new Request({
-			url: 'image.php',
-			onComplete: function(response) {
-				//el.set('html', response);
-				el.set('html', '<img src="'+response+'" style="width: 100%; height: 100%;" />');
-			}
-		}).get({
-			p: 1, // hardset page - only one during dev
-			r: row,
-			c: col,
-			z: zoomLevel
-		});
-
-		
+	visibleGrid.each(function(el, i) {
+				
+		if (el.hasChildNodes() === false) {
+			var id = el.getProperty('id').split('_');
+			var row = id[0].substr(1);
+			var col = id[1].substr(1);
+			
+			var imgRequest = new Request({
+				url: 'image.php',
+				onComplete: function(response) {
+					if (htmlBackgroundSize) {
+						el.setStyles({
+							'background-image':    'url('+response+')',
+							'background-repeat':   'no-repeat',
+							'background-position': 'top left',
+							'background-size':	   '100%'
+						});
+						el.set('html', '<em></em>'); // otherwise it will reload each grid on a scroll event
+					} else {
+						el.set('html', '<img src="'+response+'" style="width: 100%; height: 100%;" />');
+					}
+				
+				}
+			}).get({
+				p: 1, // hardset page - only one during dev
+				r: row,
+				c: col,
+				z: zoomLevel
+			});
+		}
+	
 	});
 };
 
+
 window.addEvent('load', function() {
+	if ($$('html').hasClass('backgroundsize')) {
+		htmlBackgroundSize = true;
+	};
+
 	generateFunction();
 });
 
 window.addEvent('resize', function() {
 	scaler();
+});
+
+window.addEvent('scroll', function() {
+	imageRequest();
 });
