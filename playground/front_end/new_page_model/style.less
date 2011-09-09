@@ -1,18 +1,44 @@
 html {
 	overflow-y: scroll;
-	
+	overflow-x: hidden;
 }
 
-#container {
-	overflow: hidden;
-}
+
 
 #wrapper {
+	background-color: pink;
+	
+	.page {
+		overflow: hidden;
+		float: left;
+		
+		&.left {
+			background-color: fuchsia;
+		}
+		
+		&.right {
+			background-color: orange;
+		}
+		
+		.row:nth-child(even) {
+			background-color: rgba(0,0,0,0.1);
+		}
+		
+		.grid:nth-child(odd) {
+			background-color: rgba(0,0,0,0.1);
+		}
+		
+	}
 }
+
+
+
+
 
 .row {
 	clear: both;
 	float: left;
+	overflow: hidden;
 	
 	div {
 		width: 256px;
