@@ -17,7 +17,8 @@ var pageSize = null,
     zoomLevel = null,
     htmlBackgroundSize = false,
     pages = null,
-    grid = null;
+    grid = null,
+    gridCount = {};
 
 var generateFunction = function() {	
 	
@@ -40,7 +41,6 @@ var generateFunction = function() {
 			pageSize = sizeObject[key];
 			zoomLevel = key;
 		} else {
-			console.log(key);
 			if (key = null) {
 				pageSize = sizeObject['-9'];
 			};
@@ -48,16 +48,10 @@ var generateFunction = function() {
 		};
 		
 	});
-		
-	// size container to pages size
-	body.setStyles({
-		width: pageSize.x * 2,
-		height: pageSize.y
-	});
 	
 	// number of grid items to generate
-	gridX = Math.ceil(pageSize.x / 256);
-	gridY = Math.ceil(pageSize.y / 256);
+	gridCount.x = Math.ceil(pageSize.x / 256);
+	gridCount.y = Math.ceil(pageSize.y / 256);
 	
 	// size wrapper
 	wrapper.setStyles({
@@ -76,7 +70,7 @@ var generateFunction = function() {
 	
 	var row = new Element('div', { 
 		styles: {
-			width: gridX * 256,
+			width: gridCount.x * 256,
 		},
 		'class': 'row'
 	});
@@ -85,12 +79,12 @@ var generateFunction = function() {
 	pages.each(function(page) {
 
 		// generate grid
-		for(r=0;r<gridY;r++) {
+		for(r=0;r<gridCount.y;r++) {
 			
 			tmp = row.clone();
 			page.adopt(tmp);
 			
-			for(c=0;c<gridX;c++) {
+			for(c=0;c<gridCount.x;c++) {
 				tmp.adopt(col.clone().setProperties({
 					id: 'r'+r + '_c'+c,
 					'class': 'grid'
@@ -112,60 +106,62 @@ var generateFunction = function() {
 
 var scaler = function() {    
     scalePercentage = body.getSize().x / (pageSize.x * 2);
-    
     scale = 256 * scalePercentage;
     
-    // scale items
-    pages.each(function(page) {
-    	page.setStyles({
-    		width: (pageSize.x) * scalePercentage,
-    		height: (pageSize.y) * scalePercentage
-    	});
-    	
-    	console.log(page.getSize().x);
-    	
-    });
-    
-    grid.each(function(el) {
-    	el.setStyles({
-    		width: scale,
-    		height: scale
-    	});
-    });
-
-    body.setStyles({
-        width: (pageSize.x * 2) * scalePercentage,
-        height: pageSize.y * scalePercentage
-    });
-    
-    console.log(body.getSize().x);
-    
-    
-    
-    // when finished scaling for x seconds
-    // check scale percentage
-    
-    // if percentage is < 80% or > 100%
-    // fetch new images
-    
-   	// else don't do anything
-    
-    if (scalePercentage < 1 && scalePercentage > 0.8) {
+    if (body.getSize().x > sizeObject['-9'].x ) {        
         
+        // refetch larger
+        if (scalePercentage > 1) {
+            generateFunction();
+        }
         
-    } else {
-//    	if (grid[0].getChildren) {
-//    		generateFunction();
-//    	}
-    }
+        // scale existing
+        else if (scalePercentage > 0.8) {
+            // resize wrapper
+            wrapper.setStyles({
+                'width': Math.ceil((sizeObject[zoomLevel].x * scalePercentage) * 2),
+                'height': Math.ceil(sizeObject[zoomLevel].y * scalePercentage)
+            });
+            
+            
+            // resize pages
+            pages.each(function(page) {
+                page.setStyles({
+                    'width': Math.floor(sizeObject[zoomLevel].x * scalePercentage),
+                    'height': Math.floor(sizeObject[zoomLevel].y * scalePercentage)
+                });
+            
+                // rows
+                page.getChildren().each(function(row) {
+                    row.setStyles({
+                        'width': Math.ceil(gridCount.x * scale),
+                        'height': Math.floor(scale)
+                    });
+                });
+            });
+                
+                
+            // resize grid
+            grid.each(function(box) {
+                box.setStyles({
+                    'width': Math.floor(scale),
+                    'height': Math.floor(scale)
+                });
+            });
+            
+        }
+        
+        // refetch smaller
+        else {
+            generateFunction();
+        }
+    
+    };
 };
-//
-var imageRequest = function() {
-//	
-	windowScroll = window.getScroll();
-//	
 
-	
+var imageRequest = function() {
+
+	windowScroll = window.getScroll();	
 	
 	// filter items
 	visibleGrid = grid.filter(function(el, key) {
@@ -174,7 +170,7 @@ var imageRequest = function() {
 			return true;
 		}
 	});
-//	
+
 	// each grid	
 	visibleGrid.each(function(el, i) {
 	
@@ -193,7 +189,7 @@ var imageRequest = function() {
 							'background-image':    'url('+response+')',
 							'background-repeat':   'no-repeat',
 							'background-position': 'top left',
-							'background-size':	   '100%'
+						    'background-size':	   '100%'
 						});
 						el.set('html', '<em></em>'); // otherwise it will reload each grid on a scroll event
 					} else {
@@ -202,7 +198,7 @@ var imageRequest = function() {
 				
 				}
 			}).get({
-				p: pageNumber, // hardset page - only one during dev
+				p: pageNumber,
 				r: row,
 				c: col,
 				z: zoomLevel
@@ -221,17 +217,16 @@ window.addEvent('load', function() {
 	generateFunction();
 });
 
-// var timeout = false;
+var timeout = false;
 
 window.addEvent('resize', function() {
-	//if (timeout !== false) {
-	//	clearTimeout(timeout);
-	//}
+	if (timeout !== false) {
+		clearTimeout(timeout);
+	}
 	
-	//timeout = scaler.delay(0);
-	scaler();
+	timeout = scaler.delay(200);
 });
 
 window.addEvent('scroll', function() {
-//	imageRequest();
+	imageRequest();
 });
