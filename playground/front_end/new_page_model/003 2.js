@@ -79,6 +79,10 @@ var testZoomLevel = function() {
         else if ((zoomLevel.x * 2) <= (Wx * 0.80)) {
             return true;
         }
+        
+        else if ((zoomLevel.x * 2) <= (Wx * 1.2)) {
+            return true;
+        }
     });
     
     maxSize = 0;
@@ -142,73 +146,83 @@ var generatePages = function() {
 /** 
  * setSize
  */
-var setSize = function() {
+var setSize = function(scale) {
     
-    var scale = $(document).getSize().x / (options.dimensions.page.x * 2);
+    if (!scale) {
+        scale = 1;
+    } else {
+        console.log('Scale: '+scale);
+        
+        console.log('--- Start Pages ---');
+        console.log('Single Page: '+options.dimensions.page.x);
+        console.log('Double Page: '+options.dimensions.page.x * 2);
+        console.log('Row Width: '+options.page.grid.amount.x * 256);
+        console.log('Box Size: '+256);
+        
+        console.log('--- Resize Pages ---');
+        console.log('Single Page: '+Math.floor(options.dimensions.page.x * scale));
+        console.log('Double Page: '+Math.floor((options.dimensions.page.x * 2) * scale));
+        console.log('Row Width: '+((options.page.grid.amount.x * 256) * scale));
+        console.log('Box Size: '+(256 * scale));
+    }
     
-//    if (scale >= 1) {
-//        measurements();
-//        testZoomLevel();
-//        makeGrid();
-//        generatePages();
-//        setSize();
-//    }
+    
     
     /* resize wrapper */
     $('wrapper').setStyles({
-        width: $(document).getSize().x
+        width: (options.dimensions.page.x * 2) * scale
     }); /**/
     
     /* resize each pages */
-    $(document).getElements('[class~=page]').each(function(page) {
+    options.page.pages.each(function(page) {
         page.setStyles({
             width: Math.floor(options.dimensions.page.x * scale)
         });
-        
-        /* resize each row */
+    }); /**/
+    
+    /* resize each row */
+    options.page.pages.each(function(page) {
         page.getChildren().each(function(row) {
             row.setStyles({
-                width: Math.ceil((options.page.grid.amount.x * 256) * scale),
+                width: options.page.grid.amount.x * 256,
+                height: 256 * scale
             });
         });
     }); /**/
-            
+        
     /* resize each box */
     options.page.grid.elements.each(function(box) {
         box.setStyles({
-            width: Math.floor(256 * scale),
-            height: Math.floor(256 * scale)
+            width: 256 * scale,
+            height: 256 * scale
         });
     }); /**/
 };
 
 /**
- * checkScale
+ * setScale
  */
-var checkScale = function() {
-    var scale = $(document).getSize().x / (options.dimensions.page.x * 2);
+var setScale = function() {
     
-    console.log(scale);
+    var scale = (options.dimensions.window.x / (options.dimensions.page.x * 2));
     
-    if (scale >= 1) {
-        measurements();
-        testZoomLevel();
-        makeGrid();
+    setSize(scale);
+    
+    /* 100%+ * /
+    if (scale > 1) {
         generatePages();
-        setSize();
-    }
+    } /**/
     
-    else if (scale >= 0.8) {
-        setSize();
-    }
+    /* 20% +/-* /
+    if (scale > 0.8 && scale < 1) {
+        setSize(scale);
+    } /**/    
     
-    else {
-        measurements();
-        testZoomLevel();
-        makeGrid();
+    /* > 80% * /
+    if (scale > 0) {
         generatePages();
-        setSize();
-    }
+    } /**/
+    
 };
 
 /**
@@ -249,6 +263,7 @@ window.addEvent('load', function() {
     makeGrid();
     generatePages();
     setSize();
+    setScale();
 });
 
 var timeout = false;
@@ -258,5 +273,83 @@ window.addEvent('resize', function() {
         clearTimeout(timeout);
     }
     
-    timeout = checkScale.delay(200);
+    timeout = setScale.delay(200);
 });
+
+
+/*
+
+
+
+var imageRequest = function() {
+
+    windowScroll = window.getScroll();    
+    
+    // filter items
+    visibleGrid = grid.filter(function(el, key) {
+        elPos = el.getPosition();
+        if (elPos.y <= (window.getSize().y + windowScroll.y)) {
+            return true;
+        }
+    });
+
+    // each grid    
+    visibleGrid.each(function(el, i) {
+    
+        pageNumber = el.getParent('[class~=page]').getProperty('id');
+    
+        if (el.hasChildNodes() === false) {
+            var id = el.getProperty('id').split('_');
+            var row = id[0].substr(1);
+            var col = id[1].substr(1);
+            
+            var imgRequest = new Request({
+                url: '002.php',
+                onComplete: function(response) {
+                    if (htmlBackgroundSize) {
+                        el.setStyles({
+                            'background-image':    'url('+response+')',
+                            'background-repeat':   'no-repeat',
+                            'background-position': 'top left',
+                            'background-size':       '100%'
+                        });
+                        el.set('html', '<em></em>'); // otherwise it will reload each grid on a scroll event
+                    } else {
+                        el.set('html', '<img src="'+response+'" style="width: 100%; height: 100%;" />');
+                    }
+                
+                }
+            }).get({
+                p: pageNumber,
+                r: row,
+                c: col,
+                z: zoomLevel
+            });
+        }
+    
+    });
+};
+
+
+window.addEvent('load', function() {
+    if ($$('html').hasClass('backgroundsize')) {
+        htmlBackgroundSize = true;
+    };
+
+    generateFunction();
+});
+
+var timeout = false;
+
+window.addEvent('resize', function() {
+    if (timeout !== false) {
+        clearTimeout(timeout);
+    }
+    
+    timeout = scaler.delay(200);
+});
+
+window.addEvent('scroll', function() {
+    imageRequest();
+});
+*/
