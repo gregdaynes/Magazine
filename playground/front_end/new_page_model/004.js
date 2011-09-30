@@ -1,4 +1,5 @@
-/*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false, $: false, $$: false, Element: false, r: false, c: false, Class: false, Options: false */
+/*global clearInterval: false, clearTimeout: false, document: false, event: false, frames: false, history: false, Image: false, location: false, name: false, navigator: false, Option: false, parent: false, screen: false, setInterval: false, setTimeout: false, window: false, XMLHttpRequest: false, $: false, $$: false, Element: false, r: false, c: false */
+/*jslint devel: true, browser: true, undef: true, sloppy: true, vars: true, white: true, plusplus: true, maxerr: 50, indent: 4 */
 
 /*!
  * Magazine
@@ -12,15 +13,15 @@ var Magazine = new Class({
 	Implements: [Options],
 
 	options: {
-		pageCount:			2,
-		container:			'magazine', // main container id
+		pageCount:		 	2,
+		container:		 	'magazine', // main container id
 		zoomLevels:			null,
 		selectedZoomLevel:	null,
 		pageDimensions:		null,
-		gridSize:			256,
-		currentPage:		1,
+		gridSize:		  	256,
+		currentPage:	   	1,
 		pageExtras:			{},
-		grid:				{ 'x': 0, 'y': 0}
+		grid:				{ 'x': 0, 'y': 0},
 	},
 
 	initialize: function(options) {
@@ -65,15 +66,12 @@ var Magazine = new Class({
 
 	drawNavigation: function() {
 		console.log('Drawing navigation');
-		
 	},
 
 	drawSpread: function() {
 		console.log('Drawing page spread');
 		
-		if (this.pageSpread !== null) {
-			this.pageSpread.destroy();
-		}
+		console.log(this.options.zoomLevels);
 		
 		this.pageSpread = new Element('div', {
 			'class': 'pagespread',
@@ -227,7 +225,6 @@ var Magazine = new Class({
 	
 	scale: function() {	
 		pageSize = this.options.zoomLevels[this.options.selectedZoomLevel.level];
-		zoomLevel = this.options.selectedZoomLevel.level;
 		pageExtras = this.options.pageExtras;
 		viewPort = window.getSize();
 		gridSize = this.options.gridSize;
@@ -237,93 +234,32 @@ var Magazine = new Class({
 		
 		scaleAmount = Math.floor((adjustedViewPort / combinedPageWidths) * 100) / 100;
 		
-		console.log(scaleAmount);
-		
-		if (scaleAmount < 0.8) {
-			console.log(this.options.selectedZoomLevel.level);
-			this.options.selectedZoomLevel.level = parseFloat(this.options.selectedZoomLevel.level) - 1;
-			console.log(this.options.selectedZoomLevel.level);
-			this.drawSpread();
-			this.drawPages();
-			this.drawGrid();
-			this.scale();
-		} else if (scaleAmount > 1.0) {
-			console.log(this.options.selectedZoomLevel.level);
-			this.options.selectedZoomLevel.level = parseFloat(this.options.selectedZoomLevel.level) + 1;
-			console.log(this.options.selectedZoomLevel.level);
-			this.drawSpread();
-			this.drawPages();
-			this.drawGrid();
-			this.scale();
-		} else {
-		
-			this.pageSpread.setStyles({
-				width: Math.ceil(combinedPageWidths * scaleAmount) + (pageExtras.x * this.options.pageCount),
-				//height: viewPort.y
+		this.pageSpread.setStyles({
+			width: Math.ceil(combinedPageWidths * scaleAmount) + (pageExtras.x * this.options.pageCount),
+			//height: viewPort.y
+		});
+				
+		this.pageSpread.getChildren().each(function(page, i) {
+			page.setStyles({
+				width: pageSize.x * scaleAmount,
+				height: pageSize.y * scaleAmount
 			});
-					
-			this.pageSpread.getChildren().each(function(page, i) {
-				page.setStyles({
-					width: Math.floor(pageSize.x * scaleAmount),
-					height: Math.floor(pageSize.y * scaleAmount)
+			
+			page.getChildren().each(function(row, i) {
+				row.setStyles({
+					width: Math.ceil((this.options.grid.x * gridSize) * scaleAmount),
+					height: Math.ceil(gridSize * scaleAmount)
 				});
 				
-				page.getChildren().each(function(row, i) {
-					row.setStyles({
-						width: Math.ceil((this.options.grid.x * gridSize) * scaleAmount),
-						height: Math.floor(gridSize * scaleAmount)
+				row.getChildren().each(function(box, i) {
+					box.setStyles({
+						width: Math.floor(gridSize * scaleAmount),
+						height: Math.ceil(gridSize * scaleAmount)
 					});
-					
-					row.getChildren().each(function(box, i) {
-						console.log(Math.floor(gridSize * scaleAmount));
-						
-						box.setStyles({
-							width: Math.floor(gridSize * scaleAmount),
-							height: Math.floor(gridSize * scaleAmount)
-						});
-					});
-					
-				}, this);
+				});
+				
 			}, this);
-			
-			/// xxxx
-
-		
-			// each grid	
-			$(document).getElements('div.box').each(function(el, i) {
-			
-				pageNumber = el.getParent('[class~=page]').getProperty('id');
-			
-				if (el.hasChildNodes() === false) {
-					var id = el.getProperty('id').split('_');
-					var row = id[0].substr(1);
-					var col = id[1].substr(1);
-					
-					var imgRequest = new Request({
-						url: '004.php',
-						onComplete: function(response) {
-							//if (htmlBackgroundSize) {
-								el.setStyles({
-									'background-image':    'url('+response+')',
-									'background-repeat':   'no-repeat',
-									'background-position': 'top left',
-								    'background-size':	   '100%'
-								});
-								el.set('html', '<em></em>'); // otherwise it will reload each grid on a scroll event
-							//} else {
-							//	el.set('html', '<img src="'+response+'" style="width: 100%; height: 100%;" />');
-							//}
-						}
-					}).get({
-						p: pageNumber,
-						r: row,
-						c: col,
-						z: zoomLevel
-					});
-				}
-			
-			});
-		}
+		}, this);
 	}
 });
 
@@ -394,7 +330,7 @@ window.addEvent('load', function() {
 			pageDimensions: pageDimensions,			
 			container:	'magazine', // main container id
 			gridSize: 	  256,
-			currentPage:  4,
+			currentPage:  31,
 		});
 	};
 	
