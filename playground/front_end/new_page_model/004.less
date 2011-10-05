@@ -5,7 +5,7 @@ html {
 		background: url("../../lib/img/fabric.jpg") repeat left top;
 	}
 	
-	#navigation {
+	nav {
 		display: -webkit-box;
 		text-align: center;
 		color: #fff;
@@ -29,17 +29,9 @@ html {
 			color: #fff;
 			text-align: center;
 			
-			&.bf1 {
-				-webkit-box-flex: 1;
-			}
-			
-			&.bf2 {
-				-webkit-box-flex: 2;
-			}
-			
-			&.bf20 {
-				-webkit-box-flex: 20;
-			}
+			&.bf1 { width: 5%;  }
+			&.bf2 { width: 10%; }
+			&.bf3 { width: 65%; }
 		}
 	}
 	
@@ -51,7 +43,7 @@ html {
 		z-index: 2;
 		position: relative;
 				
-		.pagespread {
+		#spread {
 			margin: 0 auto;
 		}
 		
@@ -71,6 +63,10 @@ html {
 					//background: url("../../lib/img/grid.png") no-repeat right bottom;
 				}
 			}
+			
+			&.currentPage {
+				border-color: #ff0000;
+			}
 		}
 		
 	}
@@ -87,5 +83,7 @@ html {
 		
 		
 	}
+	
+	
 	
 }
