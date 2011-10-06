@@ -28,7 +28,7 @@ var Magazine = new Class({
 	},
 
 	initialize: function(options) {
-		console.log('initialize');
+//		console.log('initialize');
 		
 		/* Setup options + elements */
 		this.setOptions(options); // setup initial options
@@ -71,7 +71,7 @@ var Magazine = new Class({
 		
 		this.initDrawNavigation();
 		this.initDrawSpread();
-		this.initDrawPages();
+		this.drawPages();
 		this.drawGrid();
 		this.scaleCheck();
 		this.scale();
@@ -81,7 +81,7 @@ var Magazine = new Class({
 	},
 
 	initDrawNavigation: function() {
-		console.log('initDrawNavigation');
+//		console.log('initDrawNavigation');
 		
 		// local vars
 		container = this.options.container;
@@ -95,12 +95,12 @@ var Magazine = new Class({
 		
 		var ul = new Element('ul');
 		var li = [
-			new Element('li', { class: 'bf2', events: { 'click': function() { magazine.previousPage(); }}, text: 'Previous' }),
-			new Element('li', { class: 'bf3', text: '' }),
-			new Element('li', { class: 'bf1', text: 'Zoom:' }),
-			new Element('li', { class: 'bf1', events: { 'click': function() { magazine.zoomIn(); }}, text: '+' }),
-			new Element('li', { class: 'bf1', events: { 'click': function() { magazine.zoomOut(); }}, text: '-' }),
-			new Element('li', { class: 'bf2', events: { 'click': function() { magazine.nextPage(); }}, text: 'Next' }),
+			new Element('li', { 'class': 'button bf2', events: { 'click': function() { magazine.advancePage('previous'); }}, text: 'Previous' }),
+			new Element('li', { 'class': 'bf3', text: '' }),
+			new Element('li', { 'class': 'bf1', text: 'Zoom:' }),
+			new Element('li', { 'class': 'button bf1', events: { 'click': function() { magazine.zoomIn(); }}, text: '+' }),
+			new Element('li', { 'class': 'button bf1', events: { 'click': function() { magazine.zoomOut(); }}, text: '-' }),
+			new Element('li', { 'class': 'button bf2', events: { 'click': function() { magazine.advancePage('next'); }}, text: 'Next' }),
 		];
 		
 		// add elements to the dom
@@ -119,7 +119,7 @@ var Magazine = new Class({
 	 * on secondary) scales with pages ignores window bounds
 	 */
 	initDrawSpread: function() {
-		console.log('initDrawSpread');
+//		console.log('initDrawSpread');
 	
 		// local vars
 		zoomLevel = this.options.zoomLevels[this.options.selectedZoom];
@@ -144,8 +144,8 @@ var Magazine = new Class({
 		this.options.pageSpread = pageSpread;
 	},
 
-	initDrawPages: function() {
-		console.log('initDrawPages');
+	drawPages: function() {
+//		console.log('drawPages');
 		
 		// local vars
 		zoomLevel = this.options.zoomLevels[this.options.selectedZoom];
@@ -246,12 +246,12 @@ var Magazine = new Class({
 			}
 		} /**/
 		
-		//$(document).getElements('[class~=currentPage]').removeClass('currentPage');
-		//$(document).getElementById(this.options.currentPage).addClass('currentPage');
+		$(document).getElements('[class~=currentPage]').removeClass('currentPage');
+		$(document).getElementById(this.options.currentPage).addClass('currentPage');
 	},
 
 	drawGrid: function() {
-		console.log('drawGrid');
+//		console.log('drawGrid');
 		
 		// local vars
 		pages = $$('.page'); // array
@@ -298,7 +298,7 @@ var Magazine = new Class({
 	},
 	
 	scaleCheck: function() {
-		console.log('scaleCheck');
+//		console.log('scaleCheck');
 		
 		// local vars
 		pages = $$('.page');
@@ -318,19 +318,19 @@ var Magazine = new Class({
 	},
 	
 	scale: function() {
-		console.log('initScale');
+//		console.log('initScale');
 				
 		if (scaleAmount < 0.8) {
 			this.options.selectedZoom = parseFloat(this.options.selectedZoom) - 1;
 			this.initDrawSpread();
-			this.initDrawPages();
+			this.drawPages();
 			this.drawGrid();
 			this.scaleCheck();
 			this.scale();
 		} else if (scaleAmount > 1.0) {
 			this.options.selectedZoom = parseFloat(this.options.selectedZoom) + 1;
 			this.initDrawSpread();
-			this.initDrawPages();
+			this.drawPages();
 			this.drawGrid();
 			this.scaleCheck();
 			this.scale();
@@ -415,64 +415,73 @@ var Magazine = new Class({
 		});
 	},
 	
-	previousPage: function() {
-		/**/
-		this.options.currentPage = parseFloat(this.options.currentPage) - 1;
+	advancePage: function(direction) {
+		direction = direction;
+//		console.log(direction);
+		
+		if (direction == 'next') {
+			this.options.currentPage = this.options.currentPage + 1;
+		} else if (direction == 'previous') {
+			this.options.currentPage = this.options.currentPage - 1;
+		}
 		
 		currentPage = $(document).getElementById(this.options.currentPage);
 		
+		$(document).getElements('[class~=currentPage]').removeClass('currentPage');
 		if (currentPage == null) {
 			pages = $$('.page');
 			pages.each(function(el, i) {
 				pageId = parseFloat(el.getProperty('id'));
-				pageId = pageId - this.options.pageCount;
+				
+				if (direction == 'next') {
+					pageId = pageId + this.options.pageCount;
+				} else if (direction == 'previous') {
+					pageId = pageId - this.options.pageCount;
+				}
+				
 				el.setProperty('id', pageId);
 			}, this);
 			
 			this.fetchPages();
+
 		}
 		
-		$(document).getElements('[class~=currentPage]').removeClass('currentPage');
 		$(document).getElementById(this.options.currentPage).addClass('currentPage');
-		/**/
+		
 	},
 	
-	nextPage: function() {
-		/**/
-		this.options.currentPage = parseFloat(this.options.currentPage) + 1;
+	scaleSpread: function() {
+		//pageSize = pages[0].getSize();
+		pageSize = this.options.zoomLevels[this.options.selectedZoom];
 		
-		currentPage = $(document).getElementById(this.options.currentPage);
+		pageExtras = this.options.pageExtras;
+		pageExtras.x = pageExtras.computedLeft + pageExtras.computedRight;
+		//gridSize = this.options.gridSize;
+		pageCount = this.options.pageCount;
+		//scaleAmount = this.options.scaleAmount;
+		combinedPageWidths = pageSize.x * pageCount;
 		
-		if (currentPage == null) {
-			pages = $$('.page');
-			pages.each(function(el, i) {
-				pageId = parseFloat(el.getProperty('id'));
-				pageId = pageId + this.options.pageCount;
-				el.setProperty('id', pageId);
-			}, this);
-			
-			this.fetchPages();
-		}
-		
-		$(document).getElements('[class~=currentPage]').removeClass('currentPage');
-		$(document).getElementById(this.options.currentPage).addClass('currentPage');
-		/**/
+		pageSpread.setStyles({
+			width: Math.ceil(combinedPageWidths) + (pageExtras.x * pageCount),
+		});
 	},
 	
 	zoomIn: function() {
-		/**/
-		
-		//this.options.selectedZoom = this.options.selectedZoom + 1;
-		
-		//this.drawPages();
-		//this.drawGrid();
-		//scale = this.scale();
-		//this.fetchPages();
-		/**/
+		this.options.selectedZoom = this.options.selectedZoom + 1;
+		this.options.pageSpread.empty();
+		this.scaleSpread();
+		this.drawPages();
+		this.drawGrid();
+		this.fetchPages();
 	},
 	
 	zoomOut: function() {
-		
+		this.options.selectedZoom = this.options.selectedZoom - 1;
+		this.options.pageSpread.empty();
+		this.scaleSpread();
+		this.drawPages();
+		this.drawGrid();
+		this.fetchPages();
 	},
 });
 
@@ -484,7 +493,7 @@ window.addEvent('load', function() {
 	var zoomLevels = new Request({
 		url: 'params.php',
 		onRequest: function() {
-			//console.log('Getting Parameters...');
+//			console.log('Getting Parameters...');
 		},
 		
 		onComplete: function() {
