@@ -1,0 +1,93 @@
+html {
+	overflow: hidden;
+	
+	body {
+		background: url("../../lib/img/fabric.jpg") repeat left top;
+	}
+	
+	nav {
+		display: -webkit-box;
+		text-align: center;
+		color: #fff;
+		max-height: 30px;
+		line-height: 30px;
+		position: relative;
+		z-index: 2;
+		background-image: -webkit-gradient(linear, left bottom, left top, to(rgba(68, 68, 68, 1.00)), from(rgba(34, 34, 34, 1.00)));
+		background-image: -webkit-linear-gradient(top, #444, #222); /* Chrome 10+, Saf5.1+ */
+		-webkit-box-shadow: 0px 0px 5px #333;
+		-webkit-box-flex: 1;
+	
+		ul {
+			display: -webkit-box;
+			-webkit-box-flex: 1;
+			list-style: none;
+			margin: 0;
+			padding:  0;
+		}
+		
+		li {
+			&.button {
+				color: #fff;
+				text-align: center;
+				cursor: pointer;
+				display: block;
+			}	
+			&.bf1 { width: 5%;  }
+			&.bf2 { width: 10%; }
+			&.bf3 { width: 65%; }
+		}
+	}
+	
+	#magazine {
+		
+		width: 99.9%;
+		height: 100%;
+		float: left;
+		z-index: 2;
+		position: relative;
+				
+		#spread {
+			margin: 0 auto;
+		}
+		
+		.page {
+			border: 1px solid rgba(0,0,0,0.2);
+			-webkit-box-shadow: 0px 5px 10px rgba(0,0,0,0.6);
+			margin: 10px; // covers shadow
+			float: left; // floats as well as corrects margin issue vertically
+			overflow:  hidden;
+			border: 1px solid rgba(0,0,0,0.7); // identifier
+			background: rgba(255,255,255,0.1);
+			
+			.row {
+				
+				div {
+					float:  left;
+					//background: url("../../lib/img/grid.png") no-repeat right bottom;
+				}
+			}
+			
+			&.currentPage {
+				border-color: #ff0000;
+			}
+		}
+		
+	}
+	
+	.glow {
+		width:  100%;
+		height:  100%;
+		display: block;
+		position: absolute;
+		top:  0;
+		z-index: 1;
+		
+		background-image: -webkit-radial-gradient(center top, ellipse farthest-side, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+		
+		
+	}
+	
+	
+	
+}

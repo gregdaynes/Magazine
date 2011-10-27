@@ -523,7 +523,7 @@ window.addEvent('load', function() {
 				
 		Magazine = new Magazine({
 			zoomLevels: zoomLevels,
-			currentPage: 3,
+			currentPage: 0,
 		});
 	};
 	

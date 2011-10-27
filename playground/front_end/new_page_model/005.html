@@ -1,0 +1,143 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+
+	<title>005</title>
+    
+	<script src="../../lib/js/mootools-core-1.4.0-full-nocompat.js"></script>
+	<script src="../../lib/js/mootools-more-1.4.0.1.js"></script>
+	
+	<style>
+		.page {
+			width: 100px;
+			height: 140px;
+			border: 1px solid black;
+			display: block;
+			cursor: pointer;
+			margin: 0;
+			float: left;
+		}
+		
+		#pages {
+			position: relative;
+			border: 1px solid red;
+			float: left;
+		}
+		
+		#spread,
+		#spreadLeft,
+		#spreadRight {
+			border: 1px solid pink;
+			float: left;
+		}
+		
+		#negativeDestroy,
+		#positiveDestroy
+		{
+			border: 1px dashed red;
+			display: block;
+			float: left;
+			width: 220px;
+			height: 160px;
+			padding: 10px;
+			overflow: visible;
+		}
+		#negative,
+		#positive {
+			border: 1px dotted blue;
+			display: block;
+			float: left;
+			width: 220px;
+			height: 160px;
+			padding: 10px;
+			overflow: visible;
+		}
+		
+		#current {
+			border: 1px solid green;
+			display: block;
+			float: left;
+			width: 220px;
+			height: 160px;
+			padding: 10px;
+			overflow: visible;
+		}
+		
+	</style>
+	
+</head>
+<body>
+	<ul>
+		<li><a href="#" class="previous"><<<</a></li>
+		<li><a href="#" class="next">>>></a></li>
+	</ul>
+	
+	<div id="negativeDestroy">
+	
+	</div>
+	<div id="negative">
+		<div id="spreadLeft">
+		
+		</div>
+	</div>
+	
+	<div id="current">
+		<div id="spread">
+			<div id="pages">
+				<div class="page">
+					1
+				</div>
+				<div class="page">
+					2
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="positive">
+		<div id="spreadRight">
+		
+		</div>
+	</div>
+	<div id="positiveDestroy">
+	
+	</div>
+	
+	
+	<script>
+		window.addEvent('domready', function() {
+			
+			/**
+			 * Zoom page
+			 */
+			$$('.page').addEvent('click', function() {
+				console.log('enlarge');
+			});
+			
+			/**
+			 * Tween Page
+			 */
+			var slideFx = new Fx.Tween($('pages'), {
+				duration: 250,
+				transition: 'Cubic',
+				property: 'left'
+			});
+			
+			currentPosition = $('pages').getPosition($('spread')); // { x: m, y: n };
+			nextPosition = $('spreadLeft').getPosition($('spread')); // {x: m, y: n};
+			
+			console.log(currentPosition.x+ ' ' + nextPosition.x);
+			
+			$$('a.next').addEvent('click', function(event) {
+				event.stop();
+				slideFx.start(currentPosition.x, nextPosition.x).chain(function() {
+					$('pages').setStyle('left', 0);
+					$('spreadLeft').adopt($('pages'));
+				});
+			});
+			
+			
+			
+		});
+	</script>
+</body>
+</html>
