@@ -526,5 +526,19 @@ window.addEvent('load', function() {
 			currentPage: 3,
 		});
 	};
+	
+	// load scroll.js for drag abilities
+	var scrolljs = Asset.javascript('../../lib/js/scroll.js', {
+	    onLoad: function(){
+	        // make content scrollbox                    
+	        new Drag.Scroll($('spread'));
+	        
+	        // must give scroll box height or it fails
+	        var windowY = window.getSize().y,
+	        	toolbarY = $('toolbar').getSize().y;
+	        	
+	        $('spread').setStyle('height', windowY - toolbarY);
+	    }
+	});
 
 });
