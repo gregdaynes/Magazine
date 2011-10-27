@@ -1,7 +1,7 @@
-@mixin border-radius($r) {
-	-webkit-border-radius:$r;
-	-moz-border-radius:$r;
-	border-radius:$r;
+.border-radius(@r) {
+	-webkit-border-radius:@r;
+	-moz-border-radius:@r;
+	border-radius:@r;
 }
 
 .deck-container {
@@ -23,7 +23,7 @@
 		background:#888;
 
 		.borderradius & {
-			@include border-radius(16px);
+			.border-radius(16px);
 		}
 
 		&:hover, &:focus, &:active, &:visited {

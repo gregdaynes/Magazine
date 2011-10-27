@@ -1,0 +1,54 @@
+html {
+	height:100%;
+}
+
+.deck-container {
+
+	overflow:hidden;
+	
+	.js {
+		visibility:hidden;
+	}
+	
+	.ready {
+		visibility:visible;
+	}
+	
+	&.deck-loading {
+		display:none;
+	}
+}
+
+.deck-before,
+.deck-previous,
+.deck-next,
+.deck-after {
+	position:absolute;
+	left:-999em;
+	top:-999em;
+}
+
+.deck-current {
+	z-index:2;
+}
+
+.slide .slide {
+	visibility:hidden;
+	position:static;
+	min-height:0;
+}
+
+.deck-child-current {
+	position:static;
+	z-index:2;
+	
+	.slide {
+		visibility:hidden;
+	}
+	
+	.deck-previous,
+	.deck-before,
+	.deck-current {
+		visibility:visible;
+	}
+}
