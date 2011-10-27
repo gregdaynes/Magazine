@@ -7,10 +7,10 @@
 }
 
 .transition(@prop, @duration, @easing: ease-in-out, @delay: 0ms) {
-	-webkit-transition:@prop @duration @easing @delay;
-	-moz-transition:@prop @duration @easing @delay;
-	-ms-transition:@prop @duration @easing @delay;
-	-o-transition:@prop @duration @easing @delay;
+	-webkit-transition: -webkit-@prop @duration @easing @delay;
+	-moz-transition: -moz-@prop @duration @easing @delay;
+	-ms-transition: -ms-@prop @duration @easing @delay;
+	-o-transition: -o-@prop @duration @easing @delay;
 	transition:@prop @duration @easing @delay;
 }
 
@@ -26,11 +26,11 @@
 	overflow-x:hidden;
 	
 	.deck-container > .slide {
-		-webkit-transition:-webkit-transform 500ms ease-in-out;
-		-moz-transition:-moz-transform 500ms ease-in-out;
-		-ms-transition:-ms-transform 500ms ease-in-out;
-		-o-transition:-o-transform 500ms ease-in-out;
-		transition:transform 500ms ease-in-out;
+		-webkit-transition:-webkit-transform @transitionTime ease-in-out;
+		-moz-transition:-moz-transform @transitionTime ease-in-out;
+		-ms-transition:-ms-transform @transitionTime ease-in-out;
+		-o-transition:-o-transform @transitionTime ease-in-out;
+		transition:transform @transitionTime ease-in-out;
 	}
 	
 	.deck-container:not(.deck-menu) {
@@ -47,11 +47,11 @@
 				position:relative;
 				left:0;
 				top:0;
-				-webkit-transition:-webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
-				-moz-transition:-moz-transform 500ms ease-in-out, opacity 500ms ease-in-out;
-				-ms-transition:-ms-transform 500ms ease-in-out, opacity 500ms ease-in-out;
-				-o-transition:-o-transform 500ms ease-in-out, opacity 500ms ease-in-out;
-				transition:-webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+				-webkit-transition:-webkit-transform @transitionTime ease-in-out, opacity @transitionTime ease-in-out;
+				-moz-transition:-moz-transform @transitionTime ease-in-out, opacity @transitionTime ease-in-out;
+				-ms-transition:-ms-transform @transitionTime ease-in-out, opacity @transitionTime ease-in-out;
+				-o-transition:-o-transform @transitionTime ease-in-out, opacity @transitionTime ease-in-out;
+				transition:-webkit-transform @transitionTime ease-in-out, opacity @transitionTime ease-in-out;
 			}
 
 			.deck-next, .deck-after {
