@@ -53,11 +53,27 @@ window.addEvent('domready', function() {
 	/* goto function
 	 *
 	 */
+	var gotoPage = function(page) {
+		
+		if (page > slides.length - 1) {
+			page = slides.length;
+		}
+		
+		currentSlide = page - 1;
+		slide();
+	};
 	 
 	/* Slide function
 	 * advances to the next slide
 	 */
 	var slide = function() {
+		
+		// clear all slides
+		slides.each(function(el) {
+			el.set({
+				class: ''
+			});
+		});
 		
 		// previous slide -> clearable
 		if (currentSlide > 1) {
@@ -103,6 +119,17 @@ window.addEvent('domready', function() {
 			currentSlide --;
 			slide();
 		};
+	});
+	/**/
+	
+	/* goto form
+	 *
+	 */
+	$$('#moo-nav .goto form').addEvent('submit', function(event) {
+		event.stop(); // stop propagation
+
+		var page = this.getElement('[name=goto]').getProperty('value');
+		gotoPage(page);
 	});
 	/**/
 	
