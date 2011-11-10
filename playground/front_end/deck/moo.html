@@ -11,27 +11,81 @@
 	<script src="uri.js"></script>
 	<script src="keys.js"></script>
 	<script src="history.js"></script>
-	<script src="moo.js"></script>
+	
+	<script src="bootstrap.js"></script>
+   <script src="moo.js"></script>
 </head>
 <body>
-	<nav id="moo-nav">
-		<ul>
-			<li class="previous">←</li>
-			<li class="current">
-				<em></em>/<i></i>
-			</li>
-			<li class="goto">
-				<form action=".">
-					<input type="text" name="goto" />
-					<input type="submit" />
-				</form>
-			</li>
-			<li class="permalink">
-				<a href="#">#</a>
-			</li>
-			<li class="next">→</li>
-		</ul>
-	</nav>
+	
+<div id="moo-nav" class="topbar">
+	<div class="topbar-inner">
+		<div class="container" style="background-color: pink;">
+			<ul class="nav show-grid" data-behavior="BS.Dropdown">
+				
+				<li id="moo-nav-previous" class="span1">
+					<a class="icon" href="#">←</a>
+				</li>
+				
+				<li id="moo-nav-current" class="span10">
+					<a><em>0</em>/<i>0</i></a>
+				</li>
+								
+				<li id="moo-nav-goto" class="span2">
+					<a href="#" class="menu">Goto</a>
+					<ul class="menu-dropdown">
+						<li>
+							<form id="moo-nav-goto-form">
+								<input type="text" name="moo-nav-goto" />
+								<input type="submit" />
+							</form>
+						</li>
+				    </ul>
+				</li>
+				
+				<li id="moo-nav-share" class="span2">
+					<a href="#" class="menu">Share</a>
+					<ul class="menu-dropdown">
+						<li><a href="#">Twitter</a></li>
+						<li><a href="#">Facebook</a></li>
+						<li><a href="#">Google+</a></li>
+						<li>
+							<form id="moo-nav-permalink-form">
+								<input type="text" name="moo-nav-permalink" />
+							</form>
+						</li>			    
+					</ul>
+				</li>
+				
+				<li id="moo-nav-next" class="span1">
+					<a class="icon" href="#">→</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+	<!--<nav id="moo-nav" data-behavior="BS.Dropdown">
+		<div class="topbar">
+		<div class="topbar-inner">
+			<div class="container">
+			
+				<ul class="nav">
+					
+					
+					
+	
+					
+					<li>	
+						
+					</li>
+					
+					
+				</ul>
+			
+			</div>
+		</div>
+		</div>
+	</nav>-->
 	
 	<div id="moo-deck">
 		
@@ -56,6 +110,13 @@
 		</section>
 		
 	</div>
-
+	<script>
+		
+		    var behavior = new Behavior().apply(document.body);
+		    var delegator = new Delegator({
+		      getBehavior: function(){ return behavior; }
+		    }).attach(document.body);
+		  
+	</script>
 </body>
 </html>

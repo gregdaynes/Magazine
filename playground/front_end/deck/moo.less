@@ -1,60 +1,32 @@
 /* Less Files */
 @import "lib/css/reset.less";
 
-/* Vars */
-@nostate: rgba(255,0,0,0.1);
-@ready: rgba(0,0,255,0.1);
-@current: rgba(0,255,0,0.1);
-@navigationHeight: 30px;
-/**/
+// Core variables and mixins
+@import "lib/css/variables.less"; // Modify this for custom colors, font-sizes, etc
+@import "lib/css/mixins.less";
 
-html {
+// Grid system and page structure
+@import "lib/css/scaffolding.less";
+
+// Styled patterns and elements
+@import "lib/css/type.less";
+@import "lib/css/forms.less";
+@import "lib/css/tables.less";
+@import "lib/css/patterns.less";
+
+html, body {
 	height: 100%;
-	background-color: white;
-	overflow-y: hidden;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 body {
-	height: 100%;
 	background: url("../../lib/img/bg_tile.jpeg") repeat left top;
+	padding-top: 40px;
 }
 
 /* Navigation  */
-#moo-nav {
-	border-bottom: 1px solid rgba(0,0,0,.8);
-	background-image: -webkit-linear-gradient(top, #444, #222); /* Chrome 10+, Saf5.1+ */
-	-webkit-box-shadow: 0 3px 4px rgba(0,0,0,0.3);
-	
-	ul {
-		display: -webkit-box;
-		line-height: @navigationHeight;
-		-webkit-box-orient: horizontal;
-		
-	}
-	
-	li {
-		height: @navigationHeight;
-		text-align: center;
-		-webkit-box-align: stretch;
-		color: #fff;
-	}
-	
-	.previous, .next {
-		cursor: pointer;
-		z-index: 2;
-		-webkit-box-flex: 1;
-	}
-	
-	.current {
-		-webkit-box-flex: 10;
-	}
-	
-	.permalink a {
-		color: #fff;
-		text-decoration: none;
-	}
-}
+
+
 /**/
 
 /* Deck */
@@ -77,24 +49,20 @@ body {
 		/* States */
 			// nostate - default
 			left: 200%;
-			background-color: @nostate;
 			visibility: hidden;
 			
 			&.state-ready {
 				left: 100%;
-				background-color: @ready;
 				visibility: hidden;
 			}
 			
 			&.state-current {
 				left: 0%;
-				background-color: @current;
 				visibility: visible;
 			}
 			
 			&.state-ready-viewed {
 				left: -100%;
-				background-color: @ready;
 				visibility: hidden;
 			}
 
@@ -104,3 +72,8 @@ body {
 
 }
 /**/
+
+
+.show-grid [class*="span"] {
+	background-color: orange;
+}
